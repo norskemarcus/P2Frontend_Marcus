@@ -19,19 +19,21 @@ export async function getAllUsers() {
 
 function showAllData(data) {
   const tableRowsArray = data.map(user => `
-  <tr>                                
-    <td>${user.id} </td>              
-    <td>${user.name} </td>                     
-    <td>${user.address.street} </td>  
-    <td>${user.address.city} </td>
-    <td>
-    <button id="row-btn_details_${user.id}" type="button"  class="btn btn-sm btn-primary">Details</button> 
-    <button id="row-btn_delete_${user.id}" type="button"  class="btn btn-sm btn-danger">Delete</button> 
-    </td>      
-  </tr>`)
+  <div class="card m-3" style="width:400px">
+  <div class="card-body">
+    <h4 class="card-title">${user.name}</h4>
+    <p class="card-text">${user.address.street}.</p>
+    <a href="#" class="btn btn-primary">See Profile</a>
+  </div>
+  </div>
+
+  `)
+
 
   const tableRowsString = tableRowsArray.join("\n")
   document.getElementById("tbl-body").innerHTML = sanitizeStringWithTableRows(tableRowsString)
+
+  
 }
 
 async function showUserDetails(evt) {
