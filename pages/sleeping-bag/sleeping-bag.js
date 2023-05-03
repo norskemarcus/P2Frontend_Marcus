@@ -1,3 +1,6 @@
 export function initSleepingbag() {
-  console.log("test");
+  document.getElementById("temp")?.addEventListener("input", function () {
+    let temp = document.getElementById("temp-value");
+    temp.textContent = this.value;
+  });
 }
