@@ -18,10 +18,13 @@ export async function getAllUsers() {
 function showAllData(data) {
   const tableRowsArray = data.map(
     (user) => `
-  <div class="card m-3" style="width:400px">
+  <div class="card m-4 justify-content-center" style="width:300px">
+  <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:250px">
   <div class="card-body">
-    <h4 class="card-title">${user.name}</h4>
-    <p class="card-text">${user.address.street}.</p>
+    <h4 class="card-title">"Sovepose model"</h4>
+    <p class="card-text">Pris</p>
+    <p class="card-text">${user.address.street}</p>
+
     <button id="row-btn_details_${user.id}" type="button" class="btn btn-sm btn-primary" 
     data-bs-toggle="modal"
     data-bs-target="#exampleModal">Details</button> 

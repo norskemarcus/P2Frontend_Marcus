@@ -1,0 +1,156 @@
+<template>
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Søgeformular</title>
+      <!-- Bootstrap CSS -->
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"
+        integrity="sha512-VHZD8SeLE/0f/xFtZvOzoWJ9XAdN1t/OaafJwDX2yWx8DhOsTKnBBJlPvA42PFXpX9+Lc1gOYVEw5dq5xW8qgw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      />
+      <style>
+        .form-group {
+          margin-bottom: 10px;
+        }
+        .form-row {
+          justify-content: center;
+        }
+        .form-row .form-group {
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+       
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <form>
+          <div class="form-row">
+          <div class="form-group">
+            <label for="gender">Køn:</label>
+            <div class="d-flex justify-content-lg-start p-1">
+
+              
+            <div class="custom-control custom-radio custom-control-inline d-inline-block">
+              <input
+                type="radio"
+                id="gender-male"
+                name="gender-male"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="gender-male">Mand</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline d-inline-block">
+              <input
+                type="radio"
+                id="gender-female"
+                name="gender-female"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="gender-female"
+                >Kvinde</label
+              >
+            </div>
+            <div class="custom-control custom-radio custom-control-inline d-inline-block">
+              <input
+                type="radio"
+                id="gender-kids"
+                name="gender-kids"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="gender-kids">Børn</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline d-inline-block">
+              <input
+                type="radio"
+                id="gender-jr"
+                name="gender-jr"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label custom-control-inline d-inline-block" for="gender-jr">Junior</label>
+            </div>
+            </div>
+          </div>
+          </div>
+        
+          <div class="form-row">
+            <div class="form-group">
+              <label for="color">Farve:</label>
+              <select class="form-control" id="color">
+                <option value="">Vælg...</option>
+                <option value="blå">Blå</option>
+                <option value="grøn">Grøn</option>
+                <option value="grå">Grå</option>
+                <option value="gul">Gul</option>
+                <option value="lilla">Lilla</option>
+                <option value="orange">Orange</option>
+                <option value="rød">Rød</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="size">Størrelse:</label>
+              <select class="form-control" id="size">
+                <option value="">Vælg...</option>
+                <option value="ignore">Ignore</option>
+                <option value="one-size">ONE SIZE</option>
+                <option value="167">167</option>
+                <option value="170">170</option>
+                <option value="175">175</option>
+                <option value="180">180</option>
+                <option value="183">183</option>
+                <option value="185">185</option>
+                <option value="190">190</option>
+                <option value="195">195</option>
+              </select>
+            </div>
+          <div class="form-group">
+            <label for="fill">Fyld:</label>
+            <!-- Check list for fyld-->
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="fyld-fiber"
+                name="customRadioFyld"
+                class="fyld-fiber"
+              />
+              <label class="custom-control-label" for="customRadioInline1"
+                >Fiber</label
+              >
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="fyld-dun"
+                name="customRadioInline1"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="customRadioInline2"
+                >Dun</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="season">Sæson:</label>
+            <select class="form-control" id="season">
+              <option value="summer">Sommer</option>
+              <option value="spring-fall">Forår/Efterår</option>
+              <option value="winter">Vinter</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Find sovepose</button>
+        </form>
+      </div>
+
+      <!-- Bootstrap JS -->
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js"
+        integrity="sha512-jEZKv7yN/zWtt25FAaKsHNzYt/UQ+RY1n9ZjK3m3q3qMwTtTxBTn/3q3Vi7zEiW8KvxfwoaeLxo/sN/Lqb33ug=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      ></script>
+    </body>
+  </html>
+</template>
