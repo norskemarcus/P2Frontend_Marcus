@@ -65,18 +65,24 @@ async function showUserDetails(evt) {
         document.querySelector("#modal-body").innerText = `
         Mærke: ${sleepingbag.brand}
         Produktnavn: ${sleepingbag.model}
-        Pris: 
-        Længde:
-        Komforttemp.(°C):
-        Lower limit. (°C):
-        Fyld:
-        Vægt (g):
-        Sortiment:
-        Varenr:
-
+        Pris: ${sleepingbag.price}
+        Personlængde: ${sleepingbag.personHeight}
+        Komforttemp.(°C): missing
+        Lower limit. (°C): ${sleepingbag.environmentTemperatureMin} error
+        Fyld: ${sleepingbag.innerMaterial}
+        Vægt (g): 
+        Sortiment: missing
+        Varenr: ${sleepingbag.sku} 
         `;
+        // Generate link to the sleepingbag at Friluftslands homepage
+        const link = generateLink(sleepingbag.sku);
+        document.querySelector("#modal-link").innerHTML = link;
       });
   }
+}
+
+function generateLink(sku) {
+  return `<a href="https://www.friluftsland.dk/msearch?q=${sku}" target="_blank">Link</a>`;
 }
 
 export function sendInfoBetweenSites(tripObj) {
