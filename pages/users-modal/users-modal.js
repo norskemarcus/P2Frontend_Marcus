@@ -1,4 +1,5 @@
-const URL = "https://jsonplaceholder.typicode.com/users/";
+//const URL = "https://jsonplaceholder.typicode.com/users/";
+const URL = "http://localhost:8080/api/sleeping-bags";
 import { sanitizeStringWithTableRows } from "../../utils.js";
 
 export function initUsersModal() {
@@ -17,15 +18,15 @@ export async function getAllUsers() {
 
 function showAllData(data) {
   const tableRowsArray = data.map(
-    (user) => `
+    (sleepingbag) => `
   <div class="card m-4 justify-content-center" style="width:300px">
   <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:250px">
   <div class="card-body">
-    <h4 class="card-title">"Sovepose model"</h4>
-    <p class="card-text">Pris</p>
-    <p class="card-text">${user.address.street}</p>
+    <h4 class="card-title">${sleepingbag.model}</h4>
+    <p class="card-text">${sleepingbag.brand}</p>
+    <p class="card-text">Pris:</p>
 
-    <button id="row-btn_details_${user.id}" type="button" class="btn btn-sm btn-primary" 
+    <button id="row-btn_details_${sleepingbag.sku}" type="button" class="btn btn-sm btn-primary" 
     data-bs-toggle="modal"
     data-bs-target="#exampleModal">Details</button> 
     
@@ -54,12 +55,13 @@ async function showUserDetails(evt) {
     document.querySelector("#exampleModalLabel").innerText =
       "Information om sovepose " + id;
 
-    const user = await fetch(URL + id)
+    // Hente 1 sovepose @GetMapping("/{sku}
+    const sleepingbag = await fetch(URL + "/" + id)
       .then((res) => res.json())
-      .then((user) => {
+      .then((sleepingbag) => {
         document.querySelector("#modal-body").innerText = `
-        Mærke: ${user.name}
-        Produktnavn: ${user.name}
+        Mærke: ${sleepingbag.brand}
+        Produktnavn: ${sleepingbag.model}
         Pris: 
         Længde:
         Komforttemp.(°C):
