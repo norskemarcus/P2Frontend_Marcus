@@ -12,12 +12,21 @@ function sleepingBagFormSend() {
   const trip = {};
 
   try {
-    const comfortTemp = document.getElementById("temp-value")?.textContent;
+    const environmentTemperatureMin = document.getElementById("temp-value")?.textContent;
 
-    if (comfortTemp?.length !== 0) {
-      trip.comfortTemp = comfortTemp;
+    if (environmentTemperatureMin?.length !== 0) {
+      trip.environmentTemperatureMin = environmentTemperatureMin;
     }
   } catch (error) {}
+
+  try {
+    const maxCost = document.getElementById("price-value")?.textContent;
+
+    if (maxCost?.length !== 0) {
+      trip.maxCost = maxCost;
+    }
+  } catch (error) {}
+
 
   try {
     const isFemale =
@@ -27,6 +36,18 @@ function sleepingBagFormSend() {
     trip.isFemale = isFemale;
   } catch (error) {}
 
+
+  try {
+    const isColdSensitive = document.querySelector('input[name="cold"]:checked').value === "true"? "true": "false";
+    trip.isColdSensitive = isColdSensitive;
+  } catch (error) {}
+
+
+  try {
+  const innerMaterial = document.querySelector('input[name="fill"]:checked').value === "fiber"? "fiber": "dun";
+  trip.innerMaterial = innerMaterial;
+} catch (error) {}
+
   try {
     const personHeight = document.getElementById("height").value;
 
@@ -35,13 +56,7 @@ function sleepingBagFormSend() {
     }
   } catch (error) {}
 
-  try {
-    const innerMaterial =
-      document.getElementById('input[name="fill"]:checked').value === "fiber"
-        ? "fiber"
-        : "dun";
-    trip.innerMaterial = innerMaterial;
-  } catch (error) {}
+ alert(JSON.stringify(trip))
 
   sendInfoBetweenSites(trip);
 }
