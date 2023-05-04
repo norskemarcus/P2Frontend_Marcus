@@ -64,11 +64,9 @@ async function showUserDetails(evt) {
         Pris: 
         Længde:
         Komforttemp.(°C):
-        Laveste temp. (°C):
+        Lower limit. (°C):
         Fyld:
         Vægt (g):
-        Farve: 
-        Sæson:
         Sortiment:
         Varenr:
 
@@ -78,7 +76,9 @@ async function showUserDetails(evt) {
 }
 
 export function sendInfoBetweenSites(tripObj) {
-  window.router.navigate("/users-modal");
+  window.router.navigate("/sleeping-bag-result");
   const testfield = document.querySelector("#test");
   testfield.innerHTML = "The trip will have a temp of: " + tripObj.tripTemp;
+
+  alert(JSON.stringify(tripObj));
 }
