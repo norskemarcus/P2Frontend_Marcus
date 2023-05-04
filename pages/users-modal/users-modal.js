@@ -25,7 +25,7 @@ function showAllData(data) {
     <h4 class="card-title">${sleepingbag.model}</h4>
     <p class="card-text">${sleepingbag.brand}</p>
     <p class="card-text">Pris:</p>
-    
+
     <button id="row-btn_details_${sleepingbag.sku}" type="button" class="btn btn-sm btn-primary" 
     data-bs-toggle="modal"
     data-bs-target="#exampleModal">Details</button> 
@@ -55,12 +55,13 @@ async function showUserDetails(evt) {
     document.querySelector("#exampleModalLabel").innerText =
       "Information om sovepose " + id;
 
-    const user = await fetch(URL + id)
+    // Hente 1 sovepose @GetMapping("/{sku}
+    const sleepingbag = await fetch(URL + "/" + id)
       .then((res) => res.json())
-      .then((user) => {
+      .then((sleepingbag) => {
         document.querySelector("#modal-body").innerText = `
-        Mærke: ${user.name}
-        Produktnavn: ${user.name}
+        Mærke: ${sleepingbag.brand}
+        Produktnavn: ${sleepingbag.model}
         Pris: 
         Længde:
         Komforttemp.(°C):
