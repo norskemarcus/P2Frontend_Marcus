@@ -1,8 +1,7 @@
-//const URL = "https://jsonplaceholder.typicode.com/users/";
 const URL = "http://localhost:8080/api/sleeping-bags";
 import { sanitizeStringWithTableRows } from "../../utils.js";
 
-export function initUsersModal() {
+export function initSleepingBagResult() {
   document.getElementById("tbl-body").onclick = showUserDetails;
   getAllUsers();
 }
@@ -78,10 +77,8 @@ async function showUserDetails(evt) {
   }
 }
 
-export function sendInfoBetweenSites (tripObj){
-
-  window.router.navigate('/users-modal')
-  const testfield = document.querySelector("#test")
-  testfield.innerHTML = 'The trip will have a temp of: '+tripObj.tripTemp
-
+export function sendInfoBetweenSites(tripObj) {
+  window.router.navigate("/users-modal");
+  const testfield = document.querySelector("#test");
+  testfield.innerHTML = "The trip will have a temp of: " + tripObj.tripTemp;
 }
