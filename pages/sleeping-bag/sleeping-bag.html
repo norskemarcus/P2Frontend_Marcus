@@ -85,12 +85,13 @@
                 </div>
               </div>
             </div>
-            
           <div class="form-group">
             <label class="form-label" for="temp">Temperatur:</label>
-              <input type="number" class="form-control" id="temp" placeholder="Forventet mindste temperatur">
+            <input type="range" class="form-range" id="temp" min="-40" max="40" step="1" value="0">
+            <span id="temp-value">0</span>
           </div>
-          <button type="submit" class="btn btn-primary">Find sovepose</button>
+                    
+          <button type="submit" class="btn btn-primary" id="submit-info">Find sovepose</button>
         </form>
       </div>
 
@@ -100,6 +101,8 @@
         integrity="sha512-jEZKv7yN/zWtt25FAaKsHNzYt/UQ+RY1n9ZjK3m3q3qMwTtTxBTn/3q3Vi7zEiW8KvxfwoaeLxo/sN/Lqb33ug=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
+
+        
       ></script>
     </body>
   </html>

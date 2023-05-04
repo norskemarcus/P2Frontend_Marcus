@@ -75,3 +75,11 @@ async function showUserDetails(evt) {
       });
   }
 }
+
+export function sendInfoBetweenSites (tripObj){
+
+  window.router.navigate('/users-modal')
+  const testfield = document.querySelector("#test")
+  testfield.innerHTML = 'The trip will have a temp of: '+tripObj.tripTemp
+
+}
