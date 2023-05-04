@@ -38,8 +38,8 @@ function sleepingBagFormSend() {
   try {
     const innerMaterial =
       document.getElementById('input[name="fill"]:checked').value === "fiber"
-        ? "fiber"
-        : "dun";
+        ? "Fiber"
+        : "Dun";
     trip.innerMaterial = innerMaterial;
   } catch (error) {}
 

@@ -94,7 +94,7 @@ export function sanitizeStringWithTableRows(tableRows) {
   return secureRows;
 }
 
-export function makeOptions(method, body) {
+export function makeOptions(method, body, addToken) {
   const opts = {
     method: method,
     headers: {
@@ -103,9 +103,12 @@ export function makeOptions(method, body) {
     },
   };
   if (body) {
-    //Observe how we can add new fields to an object when needed
     opts.body = JSON.stringify(body);
   }
+  if (addToken && localStorage.getItem("token")) {
+    opts.headers.Authorization = "Bearer " + localStorage.getItem("token");
+  }
+
   return opts;
 }
 

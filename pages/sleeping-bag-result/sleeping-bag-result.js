@@ -3,6 +3,7 @@ import {
   handleHttpErrors,
   sanitizeStringWithTableRows,
   setStatusMsg,
+  makeOptions,
 } from "../../utils.js";
 
 export function initSleepingBagResult() {
@@ -85,12 +86,11 @@ export function sendInfoBetweenSites(tripObj) {
 }
 
 async function fetchFilteredSleepingBags(tripObj) {
-  // Sende objektet som POST
-  // Backend ikke klar
-  // makeOptions, body = tripObj
+  //TODO: change to true when security is added
+  const options = makeOptions("POST", tripObj, false);
 
   try {
-    const filteredResult = await fetch(URL).then(handleHttpErrors);
+    const filteredResult = await fetch(URL, options).then(handleHttpErrors);
     showAllData(filteredResult);
   } catch (err) {
     setStatusMsg("Error", true);
