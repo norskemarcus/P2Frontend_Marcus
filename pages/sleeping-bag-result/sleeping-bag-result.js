@@ -1,19 +1,22 @@
 const URL = "http://localhost:8080/api/sleeping-bags";
-import { sanitizeStringWithTableRows } from "../../utils.js";
+import {
+  handleHttpErrors,
+  sanitizeStringWithTableRows,
+  setStatusMsg,
+} from "../../utils.js";
 
 export function initSleepingBagResult() {
   document.getElementById("tbl-body").onclick = showUserDetails;
-  getAllUsers();
 }
-
-export async function getAllUsers() {
+/* 
+async function getFilteredSleepingBags() {
   try {
-    const usersFromServer = await fetch(URL).then((res) => res.json());
+    const usersFromServer = await fetch(URL).then(handleHttpErrors);
     showAllData(usersFromServer);
   } catch (err) {
     console.error("UPPPPPS: " + err); //This can be done better - do it
   }
-}
+} */
 
 function showAllData(data) {
   const tableRowsArray = data.map(
@@ -54,7 +57,7 @@ async function showUserDetails(evt) {
     document.querySelector("#exampleModalLabel").innerText =
       "Information om sovepose " + id;
 
-    // Hente 1 sovepose @GetMapping("/{sku}
+    // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
     const sleepingbag = await fetch(URL + "/" + id)
       .then((res) => res.json())
       .then((sleepingbag) => {
@@ -77,8 +80,19 @@ async function showUserDetails(evt) {
 
 export function sendInfoBetweenSites(tripObj) {
   window.router.navigate("/sleeping-bag-result");
-  const testfield = document.querySelector("#test");
-  testfield.innerHTML = "The trip will have a temp of: " + tripObj.tripTemp;
 
-  alert(JSON.stringify(tripObj));
+  fetchFilteredSleepingBags(tripObj);
+}
+
+async function fetchFilteredSleepingBags(tripObj) {
+  // Sende objektet som POST
+  // Backend ikke klar
+  // makeOptions, body = tripObj
+
+  try {
+    const filteredResult = await fetch(URL).then(handleHttpErrors);
+    showAllData(filteredResult);
+  } catch (err) {
+    setStatusMsg("Error", true);
+  }
 }
