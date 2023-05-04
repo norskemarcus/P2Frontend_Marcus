@@ -8,15 +8,15 @@ import {
   loadTemplate,
 } from "./utils.js";
 
-import { initUsersModal } from "./pages/users-modal/users-modal.js";
-import { initSleepingbag } from "./pages/sleeping-bag/sleeping-bag.js";
+import { initSleepingBagResult } from "./pages/sleeping-bag-result/sleeping-bag-result.js";
+import { initSleepingBagForm } from "./pages/sleeping-bag-form/sleeping-bag-form.js";
 
 window.addEventListener("load", async () => {
-  const templateUsersModal = await loadTemplate(
-    "./pages/users-modal/users-modal.html"
+  const templateSleepingBagResult = await loadTemplate(
+    "./pages/sleeping-bag-result/sleeping-bag-result.html"
   );
-  const templateSleepingbag = await loadTemplate(
-    "./pages/sleeping-bag/sleeping-bag.html"
+  const templateSleepingBagForm = await loadTemplate(
+    "./pages/sleeping-bag-form/sleeping-bag-form.html"
   );
   const templateNotFound = await loadTemplate("./pages/notFound/notFound.html");
 
@@ -42,14 +42,14 @@ window.addEventListener("load", async () => {
       Observe that this is so simple that all HTML is added in the on-handler for the route. 
       </p>
      `),
-      "/users-modal": () => {
-        renderTemplate(templateUsersModal, "content");
-        initUsersModal();
+      "/sleeping-bag-result": () => {
+        renderTemplate(templateSleepingBagResult, "content");
+        initSleepingBagResult();
       },
 
-      "/sleeping-bag": () => {
-        renderTemplate(templateSleepingbag, "content");
-        initSleepingbag();
+      "/sleeping-bag-form": () => {
+        renderTemplate(templateSleepingBagForm, "content");
+        initSleepingBagForm();
       },
     })
     .notFound(() => {
