@@ -47,8 +47,8 @@ function sleepingBagFormSend() {
   try {
     const innerMaterial =
       document.querySelector('input[name="fill"]:checked').value === "fiber"
-        ? "fiber"
-        : "dun";
+        ? "Fiber"
+        : "Dun";
     trip.innerMaterial = innerMaterial;
   } catch (error) {}
 
@@ -59,8 +59,6 @@ function sleepingBagFormSend() {
       trip.personHeight = personHeight;
     }
   } catch (error) {}
-
-  alert(JSON.stringify(trip));
 
   sendInfoBetweenSites(trip);
 }
