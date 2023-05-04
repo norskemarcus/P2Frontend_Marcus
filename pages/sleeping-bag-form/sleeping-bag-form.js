@@ -11,5 +11,6 @@ export function initSleepingBagForm() {
   document.getElementById("temp")?.addEventListener("input", function () {
     const temp = document.getElementById("temp-value");
     temp.textContent = this.value;
+    
   });
 }
