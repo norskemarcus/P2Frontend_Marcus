@@ -58,20 +58,20 @@ async function showUserDetails(evt) {
     document.querySelector("#exampleModalLabel").innerText =
       "Information om sovepose " + id;
 
-    // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
+    // OBS modal. Hente 1 sovepose @GetMapping("/{sku}
     const sleepingbag = await fetch(URL + "/" + id)
       .then((res) => res.json())
       .then((sleepingbag) => {
         document.querySelector("#modal-body").innerText = `
         Mærke: ${sleepingbag.brand}
         Produktnavn: ${sleepingbag.model}
-        Pris: ${sleepingbag.price}
+        Pris: ${sleepingbag.cost}
         Personlængde: ${sleepingbag.personHeight}
-        Komforttemp.(°C): missing
-        Lower limit. (°C): ${sleepingbag.environmentTemperatureMin} error
+        Komforttemp.(°C): ${sleepingbag.comfortTemp}
+        Lower limit. (°C): ${sleepingbag.lowerLimitTemp} 
         Fyld: ${sleepingbag.innerMaterial}
-        Vægt (g): 
-        Sortiment: missing
+        Vægt (g): ${sleepingbag.productWeight}
+        Sortiment: ${sleepingbag.stockLocation}
         Varenr: ${sleepingbag.sku} 
         `;
         // Generate link to the sleepingbag at Friluftslands homepage
