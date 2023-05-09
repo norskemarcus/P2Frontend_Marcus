@@ -54,6 +54,18 @@ function sleepingBagFormSend() {
   } catch (error) {}
 
   try {
+    const heightInput = document.getElementById("height");
+
+    heightInput.addEventListener("input", (event) => {
+      const inputValue = event.target.value;
+      const numericRegex = /^[0-9]*$/; // regular expression to match only numbers
+
+      if (!numericRegex.test(inputValue)) {
+        event.target.value = ""; // clear the input field
+        document.getElementById("error-message").textContent =
+          "Indtast din højde i cm";
+      }
+    });
     const personHeight = document.getElementById("height").value;
 
     if (personHeight?.length !== 0) {
