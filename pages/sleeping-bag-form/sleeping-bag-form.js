@@ -10,6 +10,7 @@ export function initSleepingBagForm() {
 
 function sleepingBagFormSend() {
   const trip = {};
+  
 
   try {
     const environmentTemperatureMin =

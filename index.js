@@ -10,6 +10,7 @@ import {
 
 import { initSleepingBagResult } from "./pages/sleeping-bag-result/sleeping-bag-result.js";
 import { initSleepingBagForm } from "./pages/sleeping-bag-form/sleeping-bag-form.js";
+import { initSleepingBagForm2 } from "./pages/sleeping-bag-form2/sleeping-bag-form2.js";
 
 window.addEventListener("load", async () => {
   const templateSleepingBagResult = await loadTemplate(
@@ -17,6 +18,9 @@ window.addEventListener("load", async () => {
   );
   const templateSleepingBagForm = await loadTemplate(
     "./pages/sleeping-bag-form/sleeping-bag-form.html"
+  );
+  const templateSleepingBagForm2 = await loadTemplate(
+    "./pages/sleeping-bag-form2/sleeping-bag-form2.html"
   );
   const templateNotFound = await loadTemplate("./pages/notFound/notFound.html");
 
@@ -50,6 +54,11 @@ window.addEventListener("load", async () => {
       "/sleeping-bag-form": () => {
         renderTemplate(templateSleepingBagForm, "content");
         initSleepingBagForm();
+      },
+
+      "/sleeping-bag-form2": () => {
+        renderTemplate(templateSleepingBagForm2, "content");
+        initSleepingBagForm2();
       },
     })
     .notFound(() => {
