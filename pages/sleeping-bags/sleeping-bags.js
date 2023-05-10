@@ -12,9 +12,14 @@ export function initSleepingBags() {
     .getElementById("submit-info")
     ?.addEventListener("click", sleepingBagFormSend);
   document.getElementById("temp")?.addEventListener("input", adjustTempValue);
-  document.getElementById("price")?.addEventListener("input", adjustPriceValue);
+  
+  document
+  .getElementById("price-min")
+  ?.addEventListener("input", adjustPriceValueMin);
+document
+  .getElementById("price-max")
+  ?.addEventListener("input", adjustPriceValueMax);
 }
-
 
 function sleepingBagFormSend() {
   const trip = {};
@@ -76,10 +81,34 @@ function adjustTempValue() {
   temp.textContent = this.value;
 }
 
-function adjustPriceValue() {
-  const price = document.getElementById("price-value");
-  price.textContent = this.value;
+function adjustPriceValueMin() {
+  const priceMin = document.getElementById("price-min");
+  const priceMax = document.getElementById("price-max");
+  
+  // Ensure minimum value is not higher than maximum value
+  if (parseInt(priceMin.value) > parseInt(priceMax.value)|| parseInt(priceMax.value) === parseInt(priceMin.value)  ) {
+    
+    priceMax.value = priceMin.value + 500;
+  }
+
+  document.getElementById("price-value-min").textContent = priceMin.value;
+  document.getElementById("price-value-max").textContent = priceMax.value;
+
 }
+
+function adjustPriceValueMax() {
+  const priceMin = document.getElementById("price-min");
+  const priceMax = document.getElementById("price-max");
+  
+  // Ensure maximum value is not lower than manimum value
+  if (parseInt(priceMax.value) < parseInt(priceMin.value) || parseInt(priceMax.value) === parseInt(priceMin.value) ) {
+    priceMin.value = priceMax.value - 500;
+  }
+
+  document.getElementById("price-value-min").textContent = priceMin.value;
+  document.getElementById("price-value-max").textContent = priceMax.value;
+}
+
 
 function showMultipleSleepingBags(data) {
   const tableRowsArray = data.map(
@@ -162,3 +191,4 @@ async function fetchFilteredSleepingBags(tripObj) {
     // setStatusMsg("Error", true);
   }
 }
+
