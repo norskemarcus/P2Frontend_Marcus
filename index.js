@@ -8,19 +8,11 @@ import {
   loadTemplate,
 } from "./utils.js";
 
-import { initSleepingBagResult } from "./pages/sleeping-bag-result/sleeping-bag-result.js";
-import { initSleepingBagForm } from "./pages/sleeping-bag-form/sleeping-bag-form.js";
-import { initSleepingBagForm2 } from "./pages/sleeping-bag-form2/sleeping-bag-form2.js";
+import { initSleepingBags } from "./pages/sleeping-bags/sleeping-bags.js";
 
 window.addEventListener("load", async () => {
-  const templateSleepingBagResult = await loadTemplate(
-    "./pages/sleeping-bag-result/sleeping-bag-result.html"
-  );
-  const templateSleepingBagForm = await loadTemplate(
-    "./pages/sleeping-bag-form/sleeping-bag-form.html"
-  );
-  const templateSleepingBagForm2 = await loadTemplate(
-    "./pages/sleeping-bag-form2/sleeping-bag-form2.html"
+  const templateSleepingBags = await loadTemplate(
+    "./pages/sleeping-bags/sleeping-bags.html"
   );
   const templateNotFound = await loadTemplate("./pages/notFound/notFound.html");
 
@@ -46,19 +38,10 @@ window.addEventListener("load", async () => {
       Observe that this is so simple that all HTML is added in the on-handler for the route. 
       </p>
      `),
-      "/sleeping-bag-result": () => {
-        renderTemplate(templateSleepingBagResult, "content");
-        initSleepingBagResult();
-      },
-
-      "/sleeping-bag-form": () => {
-        renderTemplate(templateSleepingBagForm, "content");
-        initSleepingBagForm();
-      },
-
-      "/sleeping-bag-form2": () => {
-        renderTemplate(templateSleepingBagForm2, "content");
-        initSleepingBagForm2();
+      "/sleeping-bags": () => {
+        console.log(templateSleepingBags);
+        renderTemplate(templateSleepingBags, "content");
+        initSleepingBags();
       },
     })
     .notFound(() => {
