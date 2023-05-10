@@ -7,6 +7,8 @@ import {
 
 const URL = "http://localhost:8080/api/sleeping-bags";
 
+let sleepingBags;
+
 export function initSleepingBags() {
   document
     .getElementById("submit-info")
@@ -81,68 +83,60 @@ function adjustPriceValue() {
   price.textContent = this.value;
 }
 
-function showMultipleSleepingBags(data) {
-  const tableRowsArray = data.map(
-    (sleepingbag) => `
+function showMultipleSleepingBags() {
+  const tableRowsArray = sleepingBags.map(
+    (sleepingBag) => `
   <div class="card m-2 col">
     <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
     <div class="card-body">
-      <h6 class="card-title">${sleepingbag.model}</h6>
-      <p class="card-text">${sleepingbag.brand}</p>
-      <p class="card-text">Pris:</p>
+      <h6 class="card-title">${sleepingBag.model}</h6>
+      <p class="card-text">${sleepingBag.brand}</p>
+      <p class="card-text">Pris: ${sleepingBag.cost}</p>
 
       <button type="button" class="btn btn-sm btn-primary" 
-      data-sku="${sleepingbag.sku}"
+      data-sku="${sleepingBag.sku}"
       data-action="details"
       data-bs-toggle="modal"
       data-bs-target="#exampleModal">Details</button> 
       
     </div>
   </div>
-
   `
   );
 
-  
   document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
-
 
   const tableRowsString = tableRowsArray.join("\n");
   document.getElementById("sleeping-bags-result").innerHTML =
     sanitizeStringWithTableRows(tableRowsString);
 }
 
-
 async function showSleepingBagDetails(event) {
   const target = event.target;
   if (target.dataset.action == "details") {
-      const id = target.dataset.sku;
+      const sku = target.dataset.sku;
+      const sleepingBag = sleepingBags.find(element => element.sku == sku);
 
       // bootstrap 5 modal
       document.querySelector("#exampleModalLabel").innerText =
-        "Information om sovepose " + id;
-  
-      // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
-      const sleepingbag = await fetch(URL + "/" + id)
-        .then((res) => res.json())
-        .then((sleepingbag) => {
-          document.querySelector("#modal-body").innerText = `
-          Mærke: ${sleepingbag.brand}
-          Produktnavn: ${sleepingbag.model}
-          Pris: ${sleepingbag.cost}
-          Personlængde: ${sleepingbag.personHeight}
-          Komforttemp.(°C): ${sleepingbag.comfortTemp}
-          Lower limit. (°C): ${sleepingbag.lowerLimitTemp}
-          Fyld: ${sleepingbag.innerMaterial}
-          Vægt (g): ${sleepingbag.productWeight}
-          Lagerstatus: ${sleepingbag.stockLocation}
-          Varenr: ${sleepingbag.sku}
-          `;
-          // Generate link to the sleepingbag at Friluftslands homepage
-          const link = generateLink(sleepingbag.sku);
-          document.querySelector("#modal-link").innerHTML = link;
-        });
-  
+        "Information om sovepose " + sleepingBag.sku;
+
+      document.querySelector("#modal-body").innerText = `
+      Mærke: ${sleepingBag.brand}
+      Produktnavn: ${sleepingBag.model}
+      Pris: ${sleepingBag.cost}
+      Personlængde: ${sleepingBag.personHeight}
+      Komforttemp.(°C): ${sleepingBag.comfortTemp}
+      Lower limit. (°C): ${sleepingBag.lowerLimitTemp}
+      Fyld: ${sleepingBag.innerMaterial}
+      Vægt (g): ${sleepingBag.productWeight}
+      Lagerstatus: ${sleepingBag.stockLocation}
+      Varenr: ${sleepingBag.sku}
+      `;
+
+      // Generate link to the sleepingbag at Friluftslands homepage
+      const link = generateLink(sleepingBag.sku);
+      document.querySelector("#modal-link").innerHTML = link;  
   }
 }
 
@@ -150,14 +144,14 @@ function generateLink(sku) {
   return `<a href="https://www.friluftsland.dk/msearch?q=${sku}" target="_blank">Link</a>`;
 }
 
-
 async function fetchFilteredSleepingBags(tripObj) {
   //TODO: change to true when security is added
   const options = makeOptions("POST", tripObj, false);
 
   try {
     const filteredResult = await fetch(URL, options).then(handleHttpErrors);
-    showMultipleSleepingBags(filteredResult);
+    sleepingBags = filteredResult;
+    showMultipleSleepingBags();
   } catch (err) {
     // setStatusMsg("Error", true);
   }
