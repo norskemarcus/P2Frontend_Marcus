@@ -84,6 +84,22 @@ function adjustPriceValue() {
 }
 
 function showMultipleSleepingBags() {
+  document.getElementById("sort-btn").innerHTML = `
+    <div class="float-end">
+      <div class="dropdown float-end">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sorter
+          </button>
+          <ul class="dropdown-menu">
+            <li id="sortCostLow" class="dropdown-item">Pris (laveste først)</li>
+            <li id="sortCostHigh" class="dropdown-item">Pris (højeste først)</li>
+            <li id="sortWeight" class="dropdown-item">Vægt (laveste først)</li>
+            <li id="sortWarmthWeight" class="dropdown-item">Varme/vægt ratio (bedste først)</li>
+          </ul>
+        </div>
+    </div>
+  `;
+
   const tableRowsArray = sleepingBags.map(
     (sleepingBag) => `
   <div class="card m-2 col">
