@@ -97,6 +97,12 @@ function showMultipleSleepingBags() {
 
   document.getElementById("sort-select")?.addEventListener("change", sortChangeEventListener);
 
+  sleepingBags.sort(compareSleepingBagCostLowFirst);
+
+  showMultipleSleepingBagsResult();
+}
+
+function showMultipleSleepingBagsResult() {
   const tableRowsArray = sleepingBags.map(
     (sleepingBag) => `
   <div class="col">
@@ -126,33 +132,19 @@ function showMultipleSleepingBags() {
     sanitizeStringWithTableRows(tableRowsString);
 }
 
-function sortChangeEventListener() {
-  console.log(structuredClone(sleepingBags.sort(compareSleepingBagCostLowFirst)));
-  console.log(structuredClone(sleepingBags.sort(compareSleepingBagCostHighFirst)));
-  console.log(structuredClone(sleepingBags.sort(compareSleepingBagWeightLowFirst)));
+function sortChangeEventListener(event) {
+  if (event.target.value == "sortCostLowFirst") {
+    sleepingBags.sort(compareSleepingBagCostLowFirst);
+  }
+  else if (event.target.value == "sortCostHighFirst") {
+    sleepingBags.sort(compareSleepingBagCostHighFirst);
+  }
+  else if (event.target.value == "sortWeightLowFirst") {
+    sleepingBags.sort(compareSleepingBagWeightLowFirst);
+  }
+  showMultipleSleepingBagsResult();
 }
 
-/*
-function sortSleepingBags(sortType) {
-  if (sortType == "sortCostLow") {
-    console.log("test1 start");
-    console.log(sleepingBags.sort(compareSleepingBagCostLow))
-    console.log("test1 stop");
-  }
-  else if (sortType == "sortCostHigh") {
-    console.log("test2 start");
-    console.log(sleepingBags.sort(compareSleepingBagCostHigh))
-    console.log("test2 stop");
-
-  }
-  else if (sortType == "sortWeightLow") {
-    console.log("test3 start");
-    console.log(sleepingBags.sort(compareSleepingBagWeightLow))
-    console.log("test3 stop");
-
-  }
-}
-*/
 
 function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.cost < sleepingBag2.cost) {
