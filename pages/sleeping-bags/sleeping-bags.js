@@ -11,19 +11,69 @@ export function initSleepingBags() {
   document
     .getElementById("submit-info")
     ?.addEventListener("click", sleepingBagFormSend);
+
   document.getElementById("temp")?.addEventListener("input", adjustTempValue);
-  
+
   document
-  .getElementById("price-min")
-  ?.addEventListener("input", adjustPriceValueMin);
-document
-  .getElementById("price-max")
-  ?.addEventListener("input", adjustPriceValueMax);
+    .getElementById("price-min")
+    ?.addEventListener("input", adjustPriceValueMin);
+  document
+    .getElementById("price-max")
+    ?.addEventListener("input", adjustPriceValueMax);
+
+  document
+    .getElementById("create-member")
+    ?.addEventListener("click", saveResult);
+}
+
+async function saveResult() {
+  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  let member = { password, email };
+
+  try {
+    const isFemale =
+      document.querySelector('input[name="gender"]:checked').value === "female"
+        ? "true"
+        : "false";
+    member.isFemale = isFemale;
+  } catch (error) {}
+
+  try {
+    const personHeight = document.getElementById("height").value;
+
+    if (personHeight?.length !== 0) {
+      member.personHeight = personHeight;
+    }
+  } catch (error) {}
+
+  try {
+    const isColdSensitive =
+      document.querySelector('input[name="cold"]:checked').value === "true"
+        ? "true"
+        : "false";
+    member.isColdSensitive = isColdSensitive;
+  } catch (error) {}
+
+  const memberURL = "http://localhost:8080/api/member";
+
+  // member = body
+  const options = makeOptions("POST", member, false);
+
+  try {
+    await fetch(memberURL, options).then(handleHttpErrors);
+    document.getElementById("status-create-member").innerText =
+      "Bruger oprettet";
+    document.getElementById("email").innerText = "";
+    document.getElementById("password").innerText = "";
+  } catch (error) {
+    document.getElementById("status-create-member").innerText = error.message;
+  }
 }
 
 function sleepingBagFormSend() {
-  const trip = {};
-  
+  let trip = {};
+
   try {
     const environmentTemperatureMin =
       document.getElementById("temp-value")?.textContent;
@@ -73,7 +123,7 @@ function sleepingBagFormSend() {
     }
   } catch (error) {}
 
-  fetchFilteredSleepingBags(trip)
+  fetchFilteredSleepingBags(trip);
 }
 
 function adjustTempValue() {
@@ -84,31 +134,34 @@ function adjustTempValue() {
 function adjustPriceValueMin() {
   const priceMin = document.getElementById("price-min");
   const priceMax = document.getElementById("price-max");
-  
+
   // Ensure minimum value is not higher than maximum value
-  if (parseInt(priceMin.value) > parseInt(priceMax.value)|| parseInt(priceMax.value) === parseInt(priceMin.value)  ) {
-    
+  if (
+    parseInt(priceMin.value) > parseInt(priceMax.value) ||
+    parseInt(priceMax.value) === parseInt(priceMin.value)
+  ) {
     priceMax.value = priceMin.value + 500;
   }
 
   document.getElementById("price-value-min").textContent = priceMin.value;
   document.getElementById("price-value-max").textContent = priceMax.value;
-
 }
 
 function adjustPriceValueMax() {
   const priceMin = document.getElementById("price-min");
   const priceMax = document.getElementById("price-max");
-  
+
   // Ensure maximum value is not lower than manimum value
-  if (parseInt(priceMax.value) < parseInt(priceMin.value) || parseInt(priceMax.value) === parseInt(priceMin.value) ) {
+  if (
+    parseInt(priceMax.value) < parseInt(priceMin.value) ||
+    parseInt(priceMax.value) === parseInt(priceMin.value)
+  ) {
     priceMin.value = priceMax.value - 500;
   }
 
   document.getElementById("price-value-min").textContent = priceMin.value;
   document.getElementById("price-value-max").textContent = priceMax.value;
 }
-
 
 function showMultipleSleepingBags(data) {
   const tableRowsArray = data.map(
@@ -132,30 +185,28 @@ function showMultipleSleepingBags(data) {
   `
   );
 
-  
-  document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
-
+  document.getElementById("sleeping-bags-result").onclick =
+    showSleepingBagDetails;
 
   const tableRowsString = tableRowsArray.join("\n");
   document.getElementById("sleeping-bags-result").innerHTML =
     sanitizeStringWithTableRows(tableRowsString);
 }
 
-
 async function showSleepingBagDetails(event) {
   const target = event.target;
   if (target.dataset.action == "details") {
-      const id = target.dataset.sku;
+    const id = target.dataset.sku;
 
-      // bootstrap 5 modal
-      document.querySelector("#exampleModalLabel").innerText =
-        "Information om sovepose " + id;
-  
-      // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
-      const sleepingbag = await fetch(URL + "/" + id)
-        .then((res) => res.json())
-        .then((sleepingbag) => {
-          document.querySelector("#modal-body").innerText = `
+    // bootstrap 5 modal
+    document.querySelector("#exampleModalLabel").innerText =
+      "Information om sovepose " + id;
+
+    // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
+    const sleepingbag = await fetch(URL + "/" + id)
+      .then((res) => res.json())
+      .then((sleepingbag) => {
+        document.querySelector("#modal-body").innerText = `
           Mærke: ${sleepingbag.brand}
           Produktnavn: ${sleepingbag.model}
           Pris: ${sleepingbag.cost}
@@ -167,18 +218,16 @@ async function showSleepingBagDetails(event) {
           Lagerstatus: ${sleepingbag.stockLocation}
           Varenr: ${sleepingbag.sku}
           `;
-          // Generate link to the sleepingbag at Friluftslands homepage
-          const link = generateLink(sleepingbag.sku);
-          document.querySelector("#modal-link").innerHTML = link;
-        });
-  
+        // Generate link to the sleepingbag at Friluftslands homepage
+        const link = generateLink(sleepingbag.sku);
+        document.querySelector("#modal-link").innerHTML = link;
+      });
   }
 }
 
 function generateLink(sku) {
   return `<a href="https://www.friluftsland.dk/msearch?q=${sku}" target="_blank">Link</a>`;
 }
-
 
 async function fetchFilteredSleepingBags(tripObj) {
   //TODO: change to true when security is added
@@ -191,4 +240,3 @@ async function fetchFilteredSleepingBags(tripObj) {
     // setStatusMsg("Error", true);
   }
 }
-
