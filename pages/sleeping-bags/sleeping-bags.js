@@ -91,7 +91,7 @@ function showMultipleSleepingBags(data) {
       <p class="card-text">${sleepingbag.brand}</p>
       <p class="card-text">Pris:</p>
 
-      <button type="button" class="btn btn-sm btn-primary" 
+      <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
       data-sku="${sleepingbag.sku}"
       data-action="details"
       data-bs-toggle="modal"
