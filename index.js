@@ -14,6 +14,7 @@ window.addEventListener("load", async () => {
   const templateSleepingBags = await loadTemplate(
     "./pages/sleeping-bags/sleeping-bags.html"
   );
+
   const templateNotFound = await loadTemplate("./pages/notFound/notFound.html");
 
   adjustForMissingHash();
@@ -30,12 +31,10 @@ window.addEventListener("load", async () => {
       },
     })
     .on({
-      //For very simple "templates", you can just insert your HTML directly like below
       "/": () =>
-        (document.getElementById("content").innerHTML = `<h2>Home</h2>
+        (document.getElementById("content").innerHTML = `<h2>Soveposevælger</h2>
       <p style='margin-top:2em'>
-      This is the content of the Home Route <br/>
-      Observe that this is so simple that all HTML is added in the on-handler for the route. 
+      For at få hjælp til at vælge rigtig sovepose, tryk på Find sovepose øverst i menuen
       </p>
      `),
       "/sleeping-bags": () => {
