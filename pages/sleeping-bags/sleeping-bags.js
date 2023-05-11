@@ -84,37 +84,36 @@ function adjustPriceValue() {
 }
 
 function showMultipleSleepingBags() {
-  document.getElementById("sort-btn").innerHTML = `
-    <div class="float-end">
-      <div class="dropdown float-end">
-          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Sorter
-          </button>
-          <ul class="dropdown-menu">
-            <li id="sortCostLow" class="dropdown-item">Pris (laveste først)</li>
-            <li id="sortCostHigh" class="dropdown-item">Pris (højeste først)</li>
-            <li id="sortWeight" class="dropdown-item">Vægt (laveste først)</li>
-            <li id="sortWarmthWeight" class="dropdown-item">Varme/vægt ratio (bedste først)</li>
-          </ul>
-        </div>
-    </div>
+  document.getElementById("sort-btn-row").innerHTML = `
+  <div class="col-lg-4 ms-auto">
+    <label for="sort">Sorter:</label>
+    <select id="sort-select" name="sort" class="form-select">
+        <option value="sortCostLowFirst" selected>Pris (laveste først)</option>
+        <option value="sortCostHighFirst">Pris (højeste først)</option>
+        <option value="sortWeightLowFirst">Vægt (laveste først)</option>
+      </select>
+  </div>
   `;
+
+  document.getElementById("sort-select")?.addEventListener("change", sortChangeEventListener);
 
   const tableRowsArray = sleepingBags.map(
     (sleepingBag) => `
-  <div class="card m-2 col">
-    <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
-    <div class="card-body">
-      <h6 class="card-title">${sleepingBag.model}</h6>
-      <p class="card-text">${sleepingBag.brand}</p>
-      <p class="card-text">Pris: ${sleepingBag.cost}</p>
+  <div class="col">
+    <div class="card m-2">
+      <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
+      <div class="card-body">
+        <h6 class="card-title">${sleepingBag.model}</h6>
+        <p class="card-text">${sleepingBag.brand}</p>
+        <p class="card-text">Pris: ${sleepingBag.cost}</p>
 
-      <button type="button" class="btn btn-sm btn-primary" 
-      data-sku="${sleepingBag.sku}"
-      data-action="details"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal">Details</button> 
-      
+        <button type="button" class="btn btn-sm btn-primary" 
+        data-sku="${sleepingBag.sku}"
+        data-action="details"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal">Details</button> 
+        
+      </div>
     </div>
   </div>
   `
@@ -125,6 +124,70 @@ function showMultipleSleepingBags() {
   const tableRowsString = tableRowsArray.join("\n");
   document.getElementById("sleeping-bags-result").innerHTML =
     sanitizeStringWithTableRows(tableRowsString);
+}
+
+function sortChangeEventListener() {
+  console.log(structuredClone(sleepingBags.sort(compareSleepingBagCostLowFirst)));
+  console.log(structuredClone(sleepingBags.sort(compareSleepingBagCostHighFirst)));
+  console.log(structuredClone(sleepingBags.sort(compareSleepingBagWeightLowFirst)));
+}
+
+/*
+function sortSleepingBags(sortType) {
+  if (sortType == "sortCostLow") {
+    console.log("test1 start");
+    console.log(sleepingBags.sort(compareSleepingBagCostLow))
+    console.log("test1 stop");
+  }
+  else if (sortType == "sortCostHigh") {
+    console.log("test2 start");
+    console.log(sleepingBags.sort(compareSleepingBagCostHigh))
+    console.log("test2 stop");
+
+  }
+  else if (sortType == "sortWeightLow") {
+    console.log("test3 start");
+    console.log(sleepingBags.sort(compareSleepingBagWeightLow))
+    console.log("test3 stop");
+
+  }
+}
+*/
+
+function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.cost < sleepingBag2.cost) {
+    return -1;
+  }
+  else if (sleepingBag1.cost > sleepingBag2.cost) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.cost > sleepingBag2.cost) {
+    return -1;
+  }
+  else if (sleepingBag1.cost < sleepingBag2.cost) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.productWeight < sleepingBag2.productWeight) {
+    return -1;
+  }
+  else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
 }
 
 async function showSleepingBagDetails(event) {
