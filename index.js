@@ -9,13 +9,13 @@ import {
 } from "./utils.js";
 
 import { initSleepingBags } from "./pages/sleeping-bags/sleeping-bags.js";
-import {initMember} from "./pages/member/member.js";
 
 window.addEventListener("load", async () => {
-  const templateSleepingBags = await loadTemplate("./pages/sleeping-bags/sleeping-bags.html");
-  const templateMember = await loadTemplate("./pages/member/member.html")
+  const templateSleepingBags = await loadTemplate(
+    "./pages/sleeping-bags/sleeping-bags.html"
+  );
+
   const templateNotFound = await loadTemplate("./pages/notFound/notFound.html");
-  
 
   adjustForMissingHash();
 
@@ -31,7 +31,6 @@ window.addEventListener("load", async () => {
       },
     })
     .on({
-     
       "/": () =>
         (document.getElementById("content").innerHTML = `<h2>Soveposevælger</h2>
       <p style='margin-top:2em'>
@@ -43,10 +42,6 @@ window.addEventListener("load", async () => {
         renderTemplate(templateSleepingBags, "content");
         initSleepingBags();
       },
-      "/member": () => {
-        renderTemplate(templateMember, "content");
-        initMember();
-      }
     })
     .notFound(() => {
       renderTemplate(templateNotFound, "content");
