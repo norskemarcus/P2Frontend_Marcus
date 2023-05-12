@@ -206,7 +206,7 @@ function showMultipleSleepingBagsResult() {
     (sleepingBag) => `
   <div class="col">
     <div class="card m-2">
-      <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
+      <img class="card-img-top" src="${sleepingBag.imageURL}" alt="Image" style="width:200px">
       <div class="card-body">
         <h6 style="font-weight: bolder;" class="card-title">${sleepingBag.brand} ${sleepingBag.model}</h6>
         <h6 class="card-text">Pris: ${sleepingBag.cost}</h6>
