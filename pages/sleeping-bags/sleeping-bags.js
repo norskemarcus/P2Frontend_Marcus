@@ -8,6 +8,7 @@ import {
 const URL = "http://localhost:8080/api/sleeping-bags";
 
 let sleepingBags;
+let tripInfo = {};
 
 export function initSleepingBags() {
   document
@@ -31,31 +32,10 @@ export function initSleepingBags() {
 async function saveResult() {
   const password = document.getElementById("password").value;
   const email = document.getElementById("email").value;
-  let member = { password, email };
-
-  try {
-    const isFemale =
-      document.querySelector('input[name="gender"]:checked').value === "female"
-        ? "true"
-        : "false";
-    member.isFemale = isFemale;
-  } catch (error) {}
-
-  try {
-    const personHeight = document.getElementById("height").value;
-
-    if (personHeight?.length !== 0) {
-      member.personHeight = personHeight;
-    }
-  } catch (error) {}
-
-  try {
-    const isColdSensitive =
-      document.querySelector('input[name="cold"]:checked').value === "true"
-        ? "true"
-        : "false";
-    member.isColdSensitive = isColdSensitive;
-  } catch (error) {}
+ 
+  let member = tripInfo;
+  member.password = password
+  member.email = email
 
   const memberURL = "http://localhost:8080/api/member";
 
@@ -74,14 +54,13 @@ async function saveResult() {
 }
 
 function sleepingBagFormSend() {
-  let trip = {};
 
   try {
     const environmentTemperatureMin =
       document.getElementById("temp-value")?.textContent;
 
     if (environmentTemperatureMin?.length !== 0) {
-      trip.environmentTemperatureMin = environmentTemperatureMin;
+      tripInfo.environmentTemperatureMin = environmentTemperatureMin;
     }
   } catch (error) {}
 
@@ -89,7 +68,7 @@ function sleepingBagFormSend() {
     const minCost = document.getElementById("price-value-min")?.textContent;
 
     if (minCost?.length !== 0) {
-      trip.minCost = minCost;
+      tripInfo.minCost = minCost;
     }
   } catch (error) {}
 
@@ -97,7 +76,7 @@ function sleepingBagFormSend() {
     const maxCost = document.getElementById("price-value-max")?.textContent;
 
     if (maxCost?.length !== 0) {
-      trip.maxCost = maxCost;
+      tripInfo.maxCost = maxCost;
     }
   } catch (error) {}
 
@@ -106,7 +85,7 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="gender"]:checked').value === "female"
         ? "true"
         : "false";
-    trip.isFemale = isFemale;
+    tripInfo.isFemale = isFemale;
   } catch (error) {}
 
   try {
@@ -114,7 +93,7 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="cold"]:checked').value === "true"
         ? "true"
         : "false";
-    trip.isColdSensitive = isColdSensitive;
+    tripInfo.isColdSensitive = isColdSensitive;
   } catch (error) {}
 
   try {
@@ -122,14 +101,14 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="fill"]:checked').value === "fiber"
         ? "Fiber"
         : "Dun";
-    trip.innerMaterial = innerMaterial;
+    tripInfo.innerMaterial = innerMaterial;
   } catch (error) {}
 
   try {
     const personHeight = document.getElementById("height").value;
 
     if (personHeight?.length !== 0) {
-      trip.personHeight = personHeight;
+      tripInfo.personHeight = personHeight;
     }
   } catch (error) {}
   
@@ -137,12 +116,12 @@ function sleepingBagFormSend() {
     const isInStore = document.getElementById("not-wider");
 
     if (isInStore.checked) {
-      trip.isInStore = "true";
+      tripInfo.isInStore = "true";
     }
   } catch (error) {}
   
 
-  fetchFilteredSleepingBags(trip);
+  fetchFilteredSleepingBags(tripInfo);
 }
 
 function adjustTempValue() {
