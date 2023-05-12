@@ -5,7 +5,8 @@ import {
   makeOptions,
 } from "../../utils.js";
 
-const URL = "http://localhost:8080/api/sleeping-bags";
+const apiURL = "http://localhost:8080/api";
+const URL = apiURL +  "/sleeping-bags";
 
 let sleepingBags;
 
@@ -26,6 +27,46 @@ export function initSleepingBags() {
   document
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
+
+  showLogin();
+}
+
+function showLogin() {
+  document.getElementById("menu").innerHTML = `
+    <li class="nav-item">
+    <button                
+    type="button"
+    class="btn bg-opacity-0 text-white"
+    id="login-modal-btn-top"
+    data-bs-toggle="modal"
+    data-bs-target="#loginModalBox"
+  >
+    Login
+  </button>
+  </li>
+  `;
+
+  document
+  .getElementById("login-btn")
+  ?.addEventListener("click", login);
+}
+
+function showLogout() {
+  document.getElementById("menu").innerHTML = `
+    <li class="nav-item">
+    <button                
+    type="button"
+    class="btn bg-opacity-0 text-white"
+    id="logout-btn"
+  >
+    Logout
+  </button>
+  </li>
+  `;
+
+  document
+  .getElementById("logout-btn")
+  ?.addEventListener("click", logout);
 }
 
 async function saveResult() {
@@ -57,7 +98,7 @@ async function saveResult() {
     member.isColdSensitive = isColdSensitive;
   } catch (error) {}
 
-  const memberURL = "http://localhost:8080/api/member";
+  const memberURL = apiURL + "/member";
 
   // member = body
   const options = makeOptions("POST", member, false);
@@ -71,6 +112,33 @@ async function saveResult() {
   } catch (error) {
     document.getElementById("status-create-member").innerText = error.message;
   }
+}
+
+async function login() {
+  const username = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+  let member = { username, password };
+
+  const URL = apiURL + "/auth/login";
+
+  const options = makeOptions("POST", member, false);
+
+  try {
+      const response = await fetch(URL, options).then(handleHttpErrors);
+      localStorage.setItem("user", response.username);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("roles", response.roles);
+
+      window.router.navigate("");
+
+      showLogout();
+  } catch (err) {
+      //setStatusMsg("Login failed", true);
+  }
+}
+
+function logout() {
+  localStorage.clear();
 }
 
 function sleepingBagFormSend() {
