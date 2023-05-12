@@ -13,14 +13,69 @@ export function initSleepingBags() {
   document
     .getElementById("submit-info")
     ?.addEventListener("click", sleepingBagFormSend);
+
   document.getElementById("temp")?.addEventListener("input", adjustTempValue);
-  document.getElementById("price")?.addEventListener("input", adjustPriceValue);
+
+  document
+    .getElementById("price-min")
+    ?.addEventListener("input", adjustPriceValueMin);
+  document
+    .getElementById("price-max")
+    ?.addEventListener("input", adjustPriceValueMax);
+
+  document
+    .getElementById("create-member")
+    ?.addEventListener("click", saveResult);
 }
 
+async function saveResult() {
+  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  let member = { password, email };
+
+  try {
+    const isFemale =
+      document.querySelector('input[name="gender"]:checked').value === "female"
+        ? "true"
+        : "false";
+    member.isFemale = isFemale;
+  } catch (error) {}
+
+  try {
+    const personHeight = document.getElementById("height").value;
+
+    if (personHeight?.length !== 0) {
+      member.personHeight = personHeight;
+    }
+  } catch (error) {}
+
+  try {
+    const isColdSensitive =
+      document.querySelector('input[name="cold"]:checked').value === "true"
+        ? "true"
+        : "false";
+    member.isColdSensitive = isColdSensitive;
+  } catch (error) {}
+
+  const memberURL = "http://localhost:8080/api/member";
+
+  // member = body
+  const options = makeOptions("POST", member, false);
+
+  try {
+    await fetch(memberURL, options).then(handleHttpErrors);
+    document.getElementById("status-create-member").innerText =
+      "Bruger oprettet";
+    document.getElementById("email").innerText = "";
+    document.getElementById("password").innerText = "";
+  } catch (error) {
+    document.getElementById("status-create-member").innerText = error.message;
+  }
+}
 
 function sleepingBagFormSend() {
-  const trip = {};
-  
+  let trip = {};
+
   try {
     const environmentTemperatureMin =
       document.getElementById("temp-value")?.textContent;
@@ -31,7 +86,15 @@ function sleepingBagFormSend() {
   } catch (error) {}
 
   try {
-    const maxCost = document.getElementById("price-value")?.textContent;
+    const minCost = document.getElementById("price-value-min")?.textContent;
+
+    if (minCost?.length !== 0) {
+      trip.minCost = minCost;
+    }
+  } catch (error) {}
+
+  try {
+    const maxCost = document.getElementById("price-value-max")?.textContent;
 
     if (maxCost?.length !== 0) {
       trip.maxCost = maxCost;
@@ -70,7 +133,7 @@ function sleepingBagFormSend() {
     }
   } catch (error) {}
 
-  fetchFilteredSleepingBags(trip)
+  fetchFilteredSleepingBags(trip);
 }
 
 function adjustTempValue() {
@@ -78,9 +141,36 @@ function adjustTempValue() {
   temp.textContent = this.value;
 }
 
-function adjustPriceValue() {
-  const price = document.getElementById("price-value");
-  price.textContent = this.value;
+function adjustPriceValueMin() {
+  const priceMin = document.getElementById("price-min");
+  const priceMax = document.getElementById("price-max");
+
+  // Ensure minimum value is not higher than maximum value
+  if (
+    parseInt(priceMin.value) > parseInt(priceMax.value) ||
+    parseInt(priceMax.value) === parseInt(priceMin.value)
+  ) {
+    priceMax.value = priceMin.value + 500;
+  }
+
+  document.getElementById("price-value-min").textContent = priceMin.value;
+  document.getElementById("price-value-max").textContent = priceMax.value;
+}
+
+function adjustPriceValueMax() {
+  const priceMin = document.getElementById("price-min");
+  const priceMax = document.getElementById("price-max");
+
+  // Ensure maximum value is not lower than manimum value
+  if (
+    parseInt(priceMax.value) < parseInt(priceMin.value) ||
+    parseInt(priceMax.value) === parseInt(priceMin.value)
+  ) {
+    priceMin.value = priceMax.value - 500;
+  }
+
+  document.getElementById("price-value-min").textContent = priceMin.value;
+  document.getElementById("price-value-max").textContent = priceMax.value;
 }
 
 function showMultipleSleepingBags() {
@@ -113,7 +203,7 @@ function showMultipleSleepingBagsResult() {
         <p class="card-text">${sleepingBag.brand}</p>
         <p class="card-text">Pris: ${sleepingBag.cost}</p>
 
-        <button type="button" class="btn btn-sm btn-primary" 
+        <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
         data-sku="${sleepingBag.sku}"
         data-action="details"
         data-bs-toggle="modal"
