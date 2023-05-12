@@ -208,9 +208,9 @@ function showMultipleSleepingBagsResult() {
     <div class="card m-2">
       <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
       <div class="card-body">
-        <h6 class="card-title">${sleepingBag.model}</h6>
-        <p class="card-text">${sleepingBag.brand}</p>
-        <p class="card-text">Pris: ${sleepingBag.cost}</p>
+        <h6 style="font-weight: bolder;" class="card-title">${sleepingBag.brand} ${sleepingBag.model}</h6>
+        <h6 class="card-text">Pris: ${sleepingBag.cost}</h6>
+        <h6 class="card-text">Vægt: ${sleepingBag.productWeight}</h6>
 
         <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
         data-sku="${sleepingBag.sku}"
