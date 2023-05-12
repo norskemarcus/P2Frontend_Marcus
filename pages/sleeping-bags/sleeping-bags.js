@@ -132,6 +132,15 @@ function sleepingBagFormSend() {
       trip.personHeight = personHeight;
     }
   } catch (error) {}
+  
+  try {
+    const isInStore = document.getElementById("not-wider");
+
+    if (isInStore.checked) {
+      trip.isInStore = "true";
+    }
+  } catch (error) {}
+  
 
   fetchFilteredSleepingBags(trip);
 }
