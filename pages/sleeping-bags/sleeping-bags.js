@@ -205,18 +205,20 @@ function showMultipleSleepingBagsResult() {
   const tableRowsArray = sleepingBags.map(
     (sleepingBag) => `
   <div class="col">
-    <div class="card m-2">
-      <img class="card-img-top" src="${sleepingBag.imageURL}" alt="Image" style="width:200px">
+    <div class="card m-2"">
+      <img class="card-img-top" src="${sleepingBag.imageURL}" alt="Image" style="display: grid; justify-items: center;">
       <div class="card-body">
-        <h6 style="font-weight: bolder;" class="card-title">${sleepingBag.brand} ${sleepingBag.model}</h6>
+        <h6 style="font-weight: bold;" class="card-title">${sleepingBag.brand}</h6>
+        <h6 style="font-weight: bold;" class="card-text">${sleepingBag.model}</h6>
         <h6 class="card-text">Pris: ${sleepingBag.cost}</h6>
         <h6 class="card-text">Vægt: ${sleepingBag.productWeight}</h6>
+
 
         <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
         data-sku="${sleepingBag.sku}"
         data-action="details"
         data-bs-toggle="modal"
-        data-bs-target="#exampleModal">Details</button> 
+        data-bs-target="#exampleModal">Mere info</button> 
         
       </div>
     </div>
@@ -303,6 +305,16 @@ async function showSleepingBagDetails(event) {
       Lagerstatus: ${sleepingBag.stockLocation}
       Varenr: ${sleepingBag.sku}
       `;
+
+      if (sleepingBag.note !== null) {
+      document.querySelector("#modal-note").innerText = `
+      Note: ${sleepingBag.note}
+      `
+    } else {
+      document.querySelector("#modal-note").innerText = ``
+    }
+
+
 
       // Generate link to the sleepingbag at Friluftslands homepage
       const link = generateLink(sleepingBag.sku);
