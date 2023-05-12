@@ -7,6 +7,8 @@ import {
 
 const URL = "http://localhost:8080/api/sleeping-bags";
 
+let sleepingBags;
+
 export function initSleepingBags() {
   document
     .getElementById("submit-info")
@@ -84,7 +86,15 @@ function sleepingBagFormSend() {
   } catch (error) {}
 
   try {
-    const maxCost = document.getElementById("price-value")?.textContent;
+    const minCost = document.getElementById("price-value-min")?.textContent;
+
+    if (minCost?.length !== 0) {
+      trip.minCost = minCost;
+    }
+  } catch (error) {}
+
+  try {
+    const maxCost = document.getElementById("price-value-max")?.textContent;
 
     if (maxCost?.length !== 0) {
       trip.maxCost = maxCost;
@@ -163,65 +173,131 @@ function adjustPriceValueMax() {
   document.getElementById("price-value-max").textContent = priceMax.value;
 }
 
-function showMultipleSleepingBags(data) {
-  const tableRowsArray = data.map(
-    (sleepingbag) => `
-  <div class="card m-2 col">
-    <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
-    <div class="card-body">
-      <h6 class="card-title">${sleepingbag.model}</h6>
-      <p class="card-text">${sleepingbag.brand}</p>
-      <p class="card-text">Pris:</p>
+function showMultipleSleepingBags() {
+  document.getElementById("sort-btn-row").innerHTML = `
+  <div class="col-lg-4 ms-auto">
+    <label for="sort">Sorter:</label>
+    <select id="sort-select" name="sort" class="form-select">
+        <option value="sortCostLowFirst" selected>Pris (laveste først)</option>
+        <option value="sortCostHighFirst">Pris (højeste først)</option>
+        <option value="sortWeightLowFirst">Vægt (laveste først)</option>
+      </select>
+  </div>
+  `;
 
-      <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
-      data-sku="${sleepingbag.sku}"
-      data-action="details"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal">Details</button> 
-      
+  document.getElementById("sort-select")?.addEventListener("change", sortChangeEventListener);
+
+  sleepingBags.sort(compareSleepingBagCostLowFirst);
+
+  showMultipleSleepingBagsResult();
+}
+
+function showMultipleSleepingBagsResult() {
+  const tableRowsArray = sleepingBags.map(
+    (sleepingBag) => `
+  <div class="col">
+    <div class="card m-2">
+      <img class="card-img-top" src="https://www.fotoagent.dk/single_picture/12535/138/large/389010021.jpg" alt="Image" style="width:200px">
+      <div class="card-body">
+        <h6 class="card-title">${sleepingBag.model}</h6>
+        <p class="card-text">${sleepingBag.brand}</p>
+        <p class="card-text">Pris: ${sleepingBag.cost}</p>
+
+        <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
+        data-sku="${sleepingBag.sku}"
+        data-action="details"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal">Details</button> 
+        
+      </div>
     </div>
   </div>
-
   `
   );
 
-  document.getElementById("sleeping-bags-result").onclick =
-    showSleepingBagDetails;
+  document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
 
   const tableRowsString = tableRowsArray.join("\n");
   document.getElementById("sleeping-bags-result").innerHTML =
     sanitizeStringWithTableRows(tableRowsString);
 }
 
+function sortChangeEventListener(event) {
+  if (event.target.value == "sortCostLowFirst") {
+    sleepingBags.sort(compareSleepingBagCostLowFirst);
+  }
+  else if (event.target.value == "sortCostHighFirst") {
+    sleepingBags.sort(compareSleepingBagCostHighFirst);
+  }
+  else if (event.target.value == "sortWeightLowFirst") {
+    sleepingBags.sort(compareSleepingBagWeightLowFirst);
+  }
+  showMultipleSleepingBagsResult();
+}
+
+
+function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.cost < sleepingBag2.cost) {
+    return -1;
+  }
+  else if (sleepingBag1.cost > sleepingBag2.cost) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.cost > sleepingBag2.cost) {
+    return -1;
+  }
+  else if (sleepingBag1.cost < sleepingBag2.cost) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
+  if (sleepingBag1.productWeight < sleepingBag2.productWeight) {
+    return -1;
+  }
+  else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
 async function showSleepingBagDetails(event) {
   const target = event.target;
   if (target.dataset.action == "details") {
-    const id = target.dataset.sku;
+      const sku = target.dataset.sku;
+      const sleepingBag = sleepingBags.find(element => element.sku == sku);
 
-    // bootstrap 5 modal
-    document.querySelector("#exampleModalLabel").innerText =
-      "Information om sovepose " + id;
+      // bootstrap 5 modal
+      document.querySelector("#exampleModalLabel").innerText =
+        "Information om sovepose " + sleepingBag.sku;
 
-    // OBS modal, ikke ændres. Hente 1 sovepose @GetMapping("/{sku}
-    const sleepingbag = await fetch(URL + "/" + id)
-      .then((res) => res.json())
-      .then((sleepingbag) => {
-        document.querySelector("#modal-body").innerText = `
-          Mærke: ${sleepingbag.brand}
-          Produktnavn: ${sleepingbag.model}
-          Pris: ${sleepingbag.cost}
-          Personlængde: ${sleepingbag.personHeight}
-          Komforttemp.(°C): ${sleepingbag.comfortTemp}
-          Lower limit. (°C): ${sleepingbag.lowerLimitTemp}
-          Fyld: ${sleepingbag.innerMaterial}
-          Vægt (g): ${sleepingbag.productWeight}
-          Lagerstatus: ${sleepingbag.stockLocation}
-          Varenr: ${sleepingbag.sku}
-          `;
-        // Generate link to the sleepingbag at Friluftslands homepage
-        const link = generateLink(sleepingbag.sku);
-        document.querySelector("#modal-link").innerHTML = link;
-      });
+      document.querySelector("#modal-body").innerText = `
+      Mærke: ${sleepingBag.brand}
+      Produktnavn: ${sleepingBag.model}
+      Pris: ${sleepingBag.cost}
+      Personlængde: ${sleepingBag.personHeight}
+      Komforttemp.(°C): ${sleepingBag.comfortTemp}
+      Lower limit. (°C): ${sleepingBag.lowerLimitTemp}
+      Fyld: ${sleepingBag.innerMaterial}
+      Vægt (g): ${sleepingBag.productWeight}
+      Lagerstatus: ${sleepingBag.stockLocation}
+      Varenr: ${sleepingBag.sku}
+      `;
+
+      // Generate link to the sleepingbag at Friluftslands homepage
+      const link = generateLink(sleepingBag.sku);
+      document.querySelector("#modal-link").innerHTML = link;  
   }
 }
 
@@ -235,7 +311,8 @@ async function fetchFilteredSleepingBags(tripObj) {
 
   try {
     const filteredResult = await fetch(URL, options).then(handleHttpErrors);
-    showMultipleSleepingBags(filteredResult);
+    sleepingBags = filteredResult;
+    showMultipleSleepingBags();
   } catch (err) {
     // setStatusMsg("Error", true);
   }

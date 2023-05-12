@@ -1,4 +1,5 @@
 <template>
+
   <div class="row">
     <div class="col-lg-3">
       <div>
@@ -154,25 +155,26 @@
           </div>
         </div>
 
- <button type="button" class="btn btn-dark" id="submit-info" style="background-color: #00461c;">Find sovepose</button>
-            </div>
-        <button                
-          type="button"
-          class="btn btn-primary"
-          id="save-result"
-          data-bs-toggle="modal"
-          data-bs-target="#memberModalBox"
-        >
-          Gem resultat
-        </button>
+        <button type="button" class="btn btn-dark" id="submit-info" style="background-color: #00461c;">Find sovepose</button>
       </div>
+
+      <button                
+        type="button"
+        class="btn btn-primary"
+        id="save-result"
+        data-bs-toggle="modal"
+        data-bs-target="#memberModalBox"
+      >
+        Gem resultat
+      </button>
+
       <div id="status"></div>
     </div>
     <div class="col">
-      <div
-        id="sleeping-bags-result"
-        class="row row-cols-1 row-cols-sm-1 row-cols-lg-4"
-      ></div>
+      <div id="sort-btn-row" class="row">
+      </div>
+      <div id="sleeping-bags-result" class="row row-cols-1 row-cols-sm-1 row-cols-lg-3">
+      </div>
     </div>
   </div>
 
@@ -268,4 +270,5 @@
       </div>
     </div>
   </div>
+
 </template>
