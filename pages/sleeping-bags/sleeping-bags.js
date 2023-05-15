@@ -364,7 +364,7 @@ async function showSleepingBagDetails(event) {
 
       // bootstrap 5 modal
       document.querySelector("#exampleModalLabel").innerText =
-        "Information om sovepose " + sleepingBag.sku;
+        "Information om sovepose:";
 
       document.querySelector("#modal-body").innerText = `
       Mærke: ${sleepingBag.brand}
