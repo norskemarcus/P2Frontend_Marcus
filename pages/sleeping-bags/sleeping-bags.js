@@ -9,6 +9,7 @@ const apiURL = "http://localhost:8080/api";
 const URL = apiURL + "/sleeping-bags";
 
 let sleepingBags;
+let tripInfo = {};
 
 export function initSleepingBags() {
   document
@@ -28,7 +29,7 @@ export function initSleepingBags() {
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
 
-  getMember();
+  //getMember();
   showLogin();
 }
 
@@ -40,16 +41,22 @@ async function getMember() {
       handleHttpErrors
     );
 
-    document.getElementById("temp-value").value =
-      result.environmentTemperatureMin;
-    document.getElementById("price-value-min").value = result.minCost;
-    document.getElementById("price-value-max").value = result.maxCost;
+    /*   document.getElementById("temp-value").innerText =
+      result.environmentTemperatureMin; */
+
+    /* document.getElementById("price-value-min").value = result.minCost;
+    document.getElementById("price-value-max").value = result.maxCost; */
+
     /*   document.querySelector('input[name="gender"]:checked').value =
       result.isFemale; */
     /*  document.querySelector('input[name="fill"]:checked').value =
       result.innerMaterial; */
     document.getElementById("height").value = result.personHeight;
-    document.getElementById("not-wider").checked = result.isInStore;
+    /*  document.getElementById("not-wider").checked = result.isInStore;
+     */
+    const isColdSensitiveCheckbox =
+      document.getElementById("is-cold-sensitive");
+    isColdSensitiveCheckbox.checked = result.isColdSensitive;
   }
 }
 
@@ -91,33 +98,12 @@ function showLogout(email) {
 async function saveResult() {
   const password = document.getElementById("password").value;
   const email = document.getElementById("email").value;
-  let member = { password, email };
 
-  try {
-    const isFemale =
-      document.querySelector('input[name="gender"]:checked').value === "female"
-        ? "true"
-        : "false";
-    member.isFemale = isFemale;
-  } catch (error) {}
+  let member = tripInfo;
+  member.password = password;
+  member.email = email;
 
-  try {
-    const personHeight = document.getElementById("height").value;
-
-    if (personHeight?.length !== 0) {
-      member.personHeight = personHeight;
-    }
-  } catch (error) {}
-
-  try {
-    const isColdSensitive =
-      document.querySelector('input[name="cold"]:checked').value === "true"
-        ? "true"
-        : "false";
-    member.isColdSensitive = isColdSensitive;
-  } catch (error) {}
-
-  const memberURL = apiURL + "/member";
+  const memberURL = "http://localhost:8080/api/member";
 
   // member = body
   const options = makeOptions("POST", member, false);
@@ -126,11 +112,80 @@ async function saveResult() {
     await fetch(memberURL, options).then(handleHttpErrors);
     document.getElementById("status-create-member").innerText =
       "Bruger oprettet";
-    document.getElementById("email").innerText = "";
-    document.getElementById("password").innerText = "";
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
   } catch (error) {
     document.getElementById("status-create-member").innerText = error.message;
   }
+}
+
+function sleepingBagFormSend() {
+  try {
+    const environmentTemperatureMin =
+      document.getElementById("temp-value")?.textContent;
+
+    if (environmentTemperatureMin?.length !== 0) {
+      tripInfo.environmentTemperatureMin = environmentTemperatureMin;
+    }
+  } catch (error) {}
+
+  try {
+    const minCost = document.getElementById("price-value-min")?.textContent;
+
+    if (minCost?.length !== 0) {
+      tripInfo.minCost = minCost;
+    }
+  } catch (error) {}
+
+  try {
+    const maxCost = document.getElementById("price-value-max")?.textContent;
+
+    if (maxCost?.length !== 0) {
+      tripInfo.maxCost = maxCost;
+    }
+  } catch (error) {}
+
+  try {
+    const isFemale =
+      document.querySelector('input[name="gender"]:checked').value === "female"
+        ? "true"
+        : "false";
+    tripInfo.isFemale = isFemale;
+  } catch (error) {}
+
+  try {
+    const isColdSensitive =
+      document.querySelector('input[name="cold"]:checked').value === "true"
+        ? "true"
+        : "false";
+    tripInfo.isColdSensitive = isColdSensitive;
+  } catch (error) {}
+
+  try {
+    const innerMaterial =
+      document.querySelector('input[name="fill"]:checked').value === "fiber"
+        ? "Fiber"
+        : "Dun";
+    tripInfo.innerMaterial = innerMaterial;
+  } catch (error) {}
+
+  try {
+    const personHeight = document.getElementById("height").value;
+
+    if (personHeight?.length !== 0) {
+      tripInfo.personHeight = personHeight;
+    }
+  } catch (error) {}
+
+  try {
+    const isInStore = document.getElementById("not-wider");
+
+    if (isInStore.checked) {
+      tripInfo.isInStore = "true";
+    }
+  } catch (error) {}
+
+  fetchFilteredSleepingBags(tripInfo);
 }
 
 async function login() {
@@ -151,6 +206,7 @@ async function login() {
     const genericModalEl = document.getElementById("loginModalBox");
     const modal = bootstrap.Modal.getInstance(genericModalEl);
     modal.hide();
+    getMember();
 
     showLogout(username);
   } catch (err) {
@@ -161,77 +217,6 @@ async function login() {
 function logout() {
   localStorage.clear();
   showLogin();
-}
-
-function sleepingBagFormSend() {
-  let trip = {};
-
-  try {
-    const environmentTemperatureMin =
-      document.getElementById("temp-value")?.textContent;
-
-    if (environmentTemperatureMin?.length !== 0) {
-      trip.environmentTemperatureMin = environmentTemperatureMin;
-    }
-  } catch (error) {}
-
-  try {
-    const minCost = document.getElementById("price-value-min")?.textContent;
-
-    if (minCost?.length !== 0) {
-      trip.minCost = minCost;
-    }
-  } catch (error) {}
-
-  try {
-    const maxCost = document.getElementById("price-value-max")?.textContent;
-
-    if (maxCost?.length !== 0) {
-      trip.maxCost = maxCost;
-    }
-  } catch (error) {}
-
-  try {
-    const isFemale =
-      document.querySelector('input[name="gender"]:checked').value === "female"
-        ? "true"
-        : "false";
-    trip.isFemale = isFemale;
-  } catch (error) {}
-
-  try {
-    const isColdSensitive =
-      document.querySelector('input[name="cold"]:checked').value === "true"
-        ? "true"
-        : "false";
-    trip.isColdSensitive = isColdSensitive;
-  } catch (error) {}
-
-  try {
-    const innerMaterial =
-      document.querySelector('input[name="fill"]:checked').value === "fiber"
-        ? "Fiber"
-        : "Dun";
-    trip.innerMaterial = innerMaterial;
-  } catch (error) {}
-
-  try {
-    const personHeight = document.getElementById("height").value;
-
-    if (personHeight?.length !== 0) {
-      trip.personHeight = personHeight;
-    }
-  } catch (error) {}
-
-  try {
-    const isInStore = document.getElementById("not-wider");
-
-    if (isInStore.checked) {
-      trip.isInStore = "true";
-    }
-  } catch (error) {}
-
-  fetchFilteredSleepingBags(trip);
 }
 
 function adjustTempValue() {
