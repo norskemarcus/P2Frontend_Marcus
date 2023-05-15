@@ -28,6 +28,7 @@ export function initSleepingBags() {
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
 
+  getMember();
   showLogin();
 }
 
@@ -39,14 +40,14 @@ async function getMember() {
       handleHttpErrors
     );
 
-    document.getElementById("temp-value").textContent =
+    document.getElementById("temp-value").value =
       result.environmentTemperatureMin;
-    document.getElementById("price-value-min").textContent = result.minCost;
-    document.getElementById("price-value-max").textContent = result.maxCost;
-    document.querySelector('input[name="gender"]:checked').value =
-      result.isFemale;
-    document.querySelector('input[name="fill"]:checked').value =
-      result.innerMaterial;
+    document.getElementById("price-value-min").value = result.minCost;
+    document.getElementById("price-value-max").value = result.maxCost;
+    /*   document.querySelector('input[name="gender"]:checked').value =
+      result.isFemale; */
+    /*  document.querySelector('input[name="fill"]:checked').value =
+      result.innerMaterial; */
     document.getElementById("height").value = result.personHeight;
     document.getElementById("not-wider").checked = result.isInStore;
   }
