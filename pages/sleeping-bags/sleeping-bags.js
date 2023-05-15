@@ -41,7 +41,7 @@ function showLogin() {
     data-bs-toggle="modal"
     data-bs-target="#loginModalBox"
   >
-    Login
+    Log ind
   </button>
   </li>
   `;
@@ -51,7 +51,21 @@ function showLogin() {
   ?.addEventListener("click", login);
 }
 
-function showLogout() {
+function showLogout(email) {
+  document.getElementById("menu").innerHTML = `
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle bg-opacity-0 text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        ${email}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
+        <li><hr class="dropdown-divider"></li>
+        <li id="logout-btn" class="dropdown-item" style="cursor: pointer;">Log ud</li>
+      </ul>
+    </li>
+  `;
+  
+  /*
   document.getElementById("menu").innerHTML = `
     <li class="nav-item">
     <button                
@@ -59,10 +73,11 @@ function showLogout() {
     class="btn bg-opacity-0 text-white"
     id="logout-btn"
   >
-    Logout
+    Logout${email}
   </button>
   </li>
   `;
+  */
 
   document
   .getElementById("logout-btn")
@@ -135,7 +150,7 @@ async function login() {
 
       //window.router.navigate("");
 
-      showLogout();
+      showLogout(username);
   } catch (err) {
       //setStatusMsg("Login failed", true);
   }
