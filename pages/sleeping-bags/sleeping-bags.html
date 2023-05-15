@@ -330,4 +330,63 @@
     </div>
   </div>
 
+  <div
+    class="modal fade"
+    id="loginModalBox"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModal">Login</h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" id="login-modal-body">
+          <div class="mb-3">
+            <form>
+            <label for="login-email" class="form-label">Email:</label>
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              placeholder=""
+            />
+          </div>
+          <div class="mb-3">
+            <label for="login-password" class="form-label">Password:</label>
+            <input
+              type="password"
+              class="form-control"
+              id="login-password"
+              placeholder=""
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" id="login-btn">
+            Login
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Luk
+          </button>
+        </form>
+
+          <div id="login-status" style="padding-top: 10px"></div>
+        </div>
+
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
 </template>
