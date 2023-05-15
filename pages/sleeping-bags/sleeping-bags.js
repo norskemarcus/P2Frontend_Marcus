@@ -46,8 +46,8 @@ async function saveResult() {
     await fetch(memberURL, options).then(handleHttpErrors);
     document.getElementById("status-create-member").innerText =
       "Bruger oprettet";
-    document.getElementById("email").innerText = "";
-    document.getElementById("password").innerText = "";
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
   } catch (error) {
     document.getElementById("status-create-member").innerText = error.message;
   }
