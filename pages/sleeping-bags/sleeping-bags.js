@@ -29,55 +29,62 @@ export function initSleepingBags() {
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
 
-  //getMember();
-  showLogin();
+  if (localStorage.user != null) {
+    getMember();
+  } else {
+    showLogin();
+  }
 }
 
 async function getMember() {
-  if (localStorage.user != null) {
-    const options = makeOptions("GET", null, true);
+  /* if (localStorage.user != null) {
+    showLogout(localStorage.getItem("user"));
+ */
+  const options = makeOptions("GET", null, true);
 
-    const result = await fetch(apiURL + "/member", options).then(
-      handleHttpErrors
-    );
+  const result = await fetch(apiURL + "/member", options).then(
+    handleHttpErrors
+  );
 
-    if (result.isFemale) {
-      document.getElementById("gender-female").checked = true;
-    } else if (!result.isFemale) {
-      document.getElementById("gender-male").checked = true;
-    }
-
-    document.getElementById("height").value = result.personHeight;
-
-    if (result.isInStore) {
-      document.getElementById("not-wider").checked = true;
-    } else if (!result.isInStore) {
-      document.getElementById("not-wider").checked = false;
-    }
-
-    if (result.innerMaterial === "Dun") {
-      document.querySelector("#fill-dun").checked = true;
-    } else if (result.innerMaterial === "Fiber") {
-      document.querySelector("#fill-fiber").checked = true;
-    }
-
-    if (result.isColdSensitive) {
-      document.getElementById("cold-yes").checked = true;
-    } else if (!result.isColdSensitive) {
-      document.getElementById("cold-no").checked = true;
-    }
-
-    document.getElementById("temp-value").textContent =
-      result.environmentTemperatureMin;
-
-    document.getElementById("temp").value = result.environmentTemperatureMin;
-
-    document.getElementById("price-value-min").textContent = result.minCost;
-    document.getElementById("price-min").value = result.minCost;
-
-    document.getElementById("price-value-max").textContent = result.maxCost;
-    document.getElementById("price-max").value = result.maxCost;
+  if (result.isFemale) {
+    document.getElementById("gender-female").checked = true;
+  } else if (!result.isFemale) {
+    document.getElementById("gender-male").checked = true;
   }
+
+  document.getElementById("height").value = result.personHeight;
+
+  if (result.isInStore) {
+    document.getElementById("not-wider").checked = true;
+  } else if (!result.isInStore) {
+    document.getElementById("not-wider").checked = false;
+  }
+
+  if (result.innerMaterial === "Dun") {
+    document.querySelector("#fill-dun").checked = true;
+  } else if (result.innerMaterial === "Fiber") {
+    document.querySelector("#fill-fiber").checked = true;
+  }
+
+  if (result.isColdSensitive) {
+    document.getElementById("cold-yes").checked = true;
+  } else if (!result.isColdSensitive) {
+    document.getElementById("cold-no").checked = true;
+  }
+
+  document.getElementById("temp-value").textContent =
+    result.environmentTemperatureMin;
+
+  document.getElementById("temp").value = result.environmentTemperatureMin;
+
+  document.getElementById("price-value-min").textContent = result.minCost;
+  document.getElementById("price-min").value = result.minCost;
+
+  document.getElementById("price-value-max").textContent = result.maxCost;
+  document.getElementById("price-max").value = result.maxCost;
+
+  showLogout(result.email);
+  sleepingBagFormSend();
 }
 
 function showLogin() {
@@ -418,7 +425,6 @@ function generateLink(sku) {
 }
 
 async function fetchFilteredSleepingBags(tripObj) {
-  //TODO: change to true when security is added
   const options = makeOptions("POST", tripObj, false);
 
   try {
