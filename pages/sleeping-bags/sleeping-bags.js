@@ -278,14 +278,18 @@ function showMultipleSleepingBagsResult() {
     (sleepingBag) => `
   <div class="col">
     <div class="card m-2">
-      <img class="card-img-top" src="${sleepingBag.imageURL}" alt="Image" style="width:200px">
+      <a href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(sleepingBag.sku)}" target="_blank">
+        <img class="card-img-top" src="${sanitizeStringWithTableRows(sleepingBag.imageURL)}" alt="Image" style="width:200px">
+      </a>
       <div class="card-body">
-        <h6 style="font-weight: bolder;" class="card-title">${sleepingBag.brand} ${sleepingBag.model}</h6>
-        <h6 class="card-text">Pris: ${sleepingBag.cost}</h6>
-        <h6 class="card-text">Vægt: ${sleepingBag.productWeight}</h6>
+        <a class="text-black" style="text-decoration: none;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(sleepingBag.sku)}" target="_blank">
+          <h6 style="font-weight: bolder;" class="card-title">${sanitizeStringWithTableRows(sleepingBag.brand)} ${sanitizeStringWithTableRows(sleepingBag.model)}</h6>
+        </a>
+        <h6 class="card-text">Pris: ${sanitizeStringWithTableRows(sleepingBag.cost)}</h6>
+        <h6 class="card-text">Vægt: ${sanitizeStringWithTableRows(sleepingBag.productWeight)}</h6>
 
         <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
-        data-sku="${sleepingBag.sku}"
+        data-sku="${sanitizeStringWithTableRows(sleepingBag.sku)}"
         data-action="details"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal">Details</button> 
@@ -299,8 +303,7 @@ function showMultipleSleepingBagsResult() {
   document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
 
   const tableRowsString = tableRowsArray.join("\n");
-  document.getElementById("sleeping-bags-result").innerHTML =
-    sanitizeStringWithTableRows(tableRowsString);
+  document.getElementById("sleeping-bags-result").innerHTML = tableRowsString;
 }
 
 function sortChangeEventListener(event) {
