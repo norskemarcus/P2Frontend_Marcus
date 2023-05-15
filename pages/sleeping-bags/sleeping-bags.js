@@ -62,6 +62,15 @@ function showLogout() {
     Logout
   </button>
   </li>
+  <li class="nav-item">
+  <button                
+  type="button"
+  class="btn bg-opacity-0 text-white"
+  id="delete-btn"
+>
+  Logout
+</button>
+</li>
   `;
 
   document
@@ -69,6 +78,8 @@ function showLogout() {
   ?.addEventListener("click", logout);
 
   document.querySelector("#delete-member")?.addEventListener("click", deleteUserById)
+
+
 }
 
 async function saveResult() {
@@ -154,6 +165,8 @@ async function deleteUserById() {
 
     const options = makeOptions("DELETE", null, true)
 
+    const URL = apiURL + "/member"
+    
     await fetch(URL, options).then(handleHttpErrors)
     localStorage.clear()
     setStatusMsg("Brugeren er slettet", true)
