@@ -61,11 +61,22 @@ async function getMember() {
       document.querySelector("#fill-fiber").checked = true;
     }
 
+    if (result.isColdSensitive) {
+      document.getElementById("cold-yes").checked = true;
+    } else if (!result.isColdSensitive) {
+      document.getElementById("cold-no").checked = true;
+    }
+
     document.getElementById("temp-value").textContent =
       result.environmentTemperatureMin;
 
+    document.getElementById("temp").value = result.environmentTemperatureMin;
+
     document.getElementById("price-value-min").textContent = result.minCost;
+    document.getElementById("price-min").value = result.minCost;
+
     document.getElementById("price-value-max").textContent = result.maxCost;
+    document.getElementById("price-max").value = result.maxCost;
   }
 }
 
