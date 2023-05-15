@@ -58,27 +58,13 @@ function showLogout(email) {
         ${email}
       </a>
       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
+        <li id="delete-user-modal-btn-top" class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
         <li><hr class="dropdown-divider"></li>
         <li id="logout-btn" class="dropdown-item" style="cursor: pointer;">Log ud</li>
       </ul>
     </li>
   `;
   
-  /*
-  document.getElementById("menu").innerHTML = `
-    <li class="nav-item">
-    <button                
-    type="button"
-    class="btn bg-opacity-0 text-white"
-    id="logout-btn"
-  >
-    Logout${email}
-  </button>
-  </li>
-  `;
-  */
-
   document
   .getElementById("logout-btn")
   ?.addEventListener("click", logout);
@@ -147,8 +133,6 @@ async function login() {
       const genericModalEl = document.getElementById('loginModalBox')
       const modal = bootstrap.Modal.getInstance(genericModalEl)
       modal.hide();
-
-      //window.router.navigate("");
 
       showLogout(username);
   } catch (err) {
