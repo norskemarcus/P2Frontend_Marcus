@@ -231,6 +231,54 @@
     </div>
   </div>
 
+  <!-- Delete member modal -->
+
+  <div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Slet bruger</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+  <div class="modal-body" id="modal-body">
+
+    <div id="delete-user-question">
+      <p>Slet bruger?</p>
+      <button id="delete-user-confirm">Ja</button>
+      <button
+      type="button"
+      data-bs-dismiss="modal"
+      aria-label="Close">Nej</button>
+    </div>
+  </div>
+    <div class="modal-body" id="status-delete"></div>
+    <div class="modal-body" id="modal-link"></div>
+    <div class="modal-footer">
+      <button
+      id="close-delete-modal"
+      type="button"
+      class="btn"
+      data-bs-dismiss="modal"
+    >
+      Luk
+    </button>
+    </div>
+  </div>
+</div>
+</div>
+
+
   <div
     class="modal fade"
     id="memberModalBox"

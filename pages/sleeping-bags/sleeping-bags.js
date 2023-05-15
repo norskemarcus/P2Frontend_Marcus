@@ -29,6 +29,10 @@ export function initSleepingBags() {
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
 
+  document
+    .querySelector("#delete-user-confirm")
+    ?.addEventListener("click", deleteUserById);
+
   if (localStorage.user != null) {
     getMember();
   } else {
@@ -111,12 +115,17 @@ function showLogout(email) {
       <a class="nav-link dropdown-toggle bg-opacity-0 text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         ${email}
       </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li id="delete-user-modal-btn-top" class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+
+        <li 
+        data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+      id="delete-user-modal-btn-top" class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
         <li><hr class="dropdown-divider"></li>
         <li id="logout-btn" class="dropdown-item" style="cursor: pointer;">Log ud</li>
       </ul>
     </li>
+    <li class="nav-item">
   `;
 
   document.getElementById("logout-btn")?.addEventListener("click", logout);
@@ -235,6 +244,9 @@ async function login() {
     modal.hide();
     getMember();
 
+    document.querySelector("#login-email").value = "";
+    document.querySelector("#login-password").value = "";
+
     showLogout(username);
   } catch (err) {
     //setStatusMsg("Login failed", true);
@@ -244,6 +256,41 @@ async function login() {
 function logout() {
   localStorage.clear();
   showLogin();
+}
+
+async function deleteUserById() {
+  try {
+    const memberToDelete = localStorage.getItem("user");
+
+    console.log(memberToDelete);
+
+    if (memberToDelete === "") {
+      document.querySelector(
+        "#status-delete"
+      ).innerText = `No member found to delete`;
+      return;
+    }
+
+    const options = makeOptions("DELETE", null, true);
+
+    const URL = apiURL + "/member";
+
+    await fetch(URL, options).then(handleHttpErrors);
+    localStorage.clear();
+    document.querySelector(
+      "#status-delete"
+    ).innerText = `Bruger ${memberToDelete} er slettet`;
+    showLogin();
+  } catch (err) {
+    document.querySelector("#status-delete").innerText = `api-fejl`;
+    console.log(err.message);
+  }
+
+  document
+    .querySelector("#close-delete-modal")
+    ?.addEventListener("click", () => {
+      document.querySelector("#status-delete").innerText = "";
+    });
 }
 
 function adjustTempValue() {
