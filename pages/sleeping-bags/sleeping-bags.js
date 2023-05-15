@@ -41,6 +41,15 @@ async function getMember() {
       handleHttpErrors
     );
 
+    if (result.isFemale){
+      document.getElementById("gender-female").checked = true
+    } else if (!result.isFemale) {
+      document.getElementById("gender-male").checked = true
+    }
+
+    document.getElementById("height").value = result.personHeight;
+    document.getElementById("not-wider").checked = result.isInStore;
+
     /*   document.getElementById("temp-value").innerText =
       result.environmentTemperatureMin; */
 
@@ -51,12 +60,9 @@ async function getMember() {
       result.isFemale; */
     /*  document.querySelector('input[name="fill"]:checked').value =
       result.innerMaterial; */
-    document.getElementById("height").value = result.personHeight;
-    /*  document.getElementById("not-wider").checked = result.isInStore;
-     */
-    const isColdSensitiveCheckbox =
-      document.getElementById("is-cold-sensitive");
-    isColdSensitiveCheckbox.checked = result.isColdSensitive;
+
+     
+
   }
 }
 
