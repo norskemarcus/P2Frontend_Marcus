@@ -41,7 +41,7 @@ function showLogin() {
     data-bs-toggle="modal"
     data-bs-target="#loginModalBox"
   >
-    Login
+    Log ind
   </button>
   </li>
   `;
@@ -51,8 +51,18 @@ function showLogin() {
   ?.addEventListener("click", login);
 }
 
-function showLogout() {
+function showLogout(email) {
   document.getElementById("menu").innerHTML = `
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle bg-opacity-0 text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        ${email}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li id="delete-user-modal-btn-top" class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
+        <li><hr class="dropdown-divider"></li>
+        <li id="logout-btn" class="dropdown-item" style="cursor: pointer;">Log ud</li>
+      </ul>
+    </li>
     <li class="nav-item">
     <button                
     type="button"
@@ -72,7 +82,7 @@ function showLogout() {
 </button>
 </li>
   `;
-
+  
   document
   .getElementById("logout-btn")
   ?.addEventListener("click", logout);
@@ -142,9 +152,11 @@ async function login() {
       localStorage.setItem("token", response.token);
       localStorage.setItem("roles", response.roles);
 
-      window.router.navigate("");
+      const genericModalEl = document.getElementById('loginModalBox')
+      const modal = bootstrap.Modal.getInstance(genericModalEl)
+      modal.hide();
 
-      showLogout();
+      showLogout(username);
   } catch (err) {
       //setStatusMsg("Login failed", true);
   }
@@ -152,6 +164,7 @@ async function login() {
 
 function logout() {
   localStorage.clear();
+  showLogin();
 }
 
 async function deleteUserById() {
