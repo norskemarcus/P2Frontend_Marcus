@@ -32,27 +32,27 @@ export function initSleepingBags() {
 }
 
 async function getMember() {
-  
-  if (localStorage.user != null){
-  const options = makeOptions("GET", null, true);
+  if (localStorage.user != null) {
+    const options = makeOptions("GET", null, true);
 
-  const result = await fetch(apiURL + "/member", options).then(handleHttpErrors);
+    const result = await fetch(apiURL + "/member", options).then(
+      handleHttpErrors
+    );
 
-  document.getElementById("temp-value")?.textContent = result.environmentTemperatureMin;
-  document.getElementById("price-value-min")?.textContent = result.minCost;
-  document.getElementById("price-value-max")?.textContent = result.maxCost;
-  document.querySelector('input[name="gender"]:checked').value = result.isFemale;
-  document.querySelector('input[name="fill"]:checked').value = result.innerMaterial;
-  document.getElementById("height").value = result.personHeight;
-  document.getElementById("not-wider").checked = result.isInStore;
-
+    document.getElementById("temp-value").textContent =
+      result.environmentTemperatureMin;
+    document.getElementById("price-value-min").textContent = result.minCost;
+    document.getElementById("price-value-max").textContent = result.maxCost;
+    document.querySelector('input[name="gender"]:checked').value =
+      result.isFemale;
+    document.querySelector('input[name="fill"]:checked').value =
+      result.innerMaterial;
+    document.getElementById("height").value = result.personHeight;
+    document.getElementById("not-wider").checked = result.isInStore;
   }
-
-  
 }
 
 function showLogin() {
-
   document.getElementById("menu").innerHTML = `
     <li class="nav-item">
     <button                
