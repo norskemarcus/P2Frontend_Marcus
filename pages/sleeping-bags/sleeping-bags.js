@@ -26,6 +26,8 @@ export function initSleepingBags() {
   document
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
+
+  document.querySelector("#delete-member")?.addEventListener("click", deleteUserById)
 }
 
 async function saveResult() {
@@ -72,6 +74,32 @@ async function saveResult() {
     document.getElementById("status-create-member").innerText = error.message;
   }
 }
+
+async function deleteUserById() {
+  try {
+    const memberToDelete = localStorage.getItem("user")
+
+    if (memberToDelete === "") {
+      setStatusMsg("No member found to delete", true);
+      return;
+    }
+
+    const options = makeOptions("DELETE", null, true)
+
+    await fetch(URL, options).then(handleHttpErrors)
+    localStorage.clear()
+    setStatusMsg("Brugeren er slettet", true)
+    
+  } catch (err) {
+    if(err.apiError) {
+      setStatusMsg(err.apiError.message, true)
+    } else {
+      setStatusMsg(err.message + "API error")
+      console.log(err.message + "API error")
+    }
+  }
+}
+
 
 function sleepingBagFormSend() {
   let trip = {};
