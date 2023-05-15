@@ -129,7 +129,11 @@ async function login() {
       localStorage.setItem("token", response.token);
       localStorage.setItem("roles", response.roles);
 
-      window.router.navigate("");
+      const genericModalEl = document.getElementById('loginModalBox')
+      const modal = bootstrap.Modal.getInstance(genericModalEl)
+      modal.hide();
+
+      //window.router.navigate("");
 
       showLogout();
   } catch (err) {
@@ -139,6 +143,7 @@ async function login() {
 
 function logout() {
   localStorage.clear();
+  showLogin();
 }
 
 function sleepingBagFormSend() {
