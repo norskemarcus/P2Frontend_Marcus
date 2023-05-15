@@ -6,7 +6,7 @@ import {
 } from "../../utils.js";
 
 const apiURL = "http://localhost:8080/api";
-const URL = apiURL +  "/sleeping-bags";
+const URL = apiURL + "/sleeping-bags";
 
 let sleepingBags;
 
@@ -46,9 +46,7 @@ function showLogin() {
   </li>
   `;
 
-  document
-  .getElementById("login-btn")
-  ?.addEventListener("click", login);
+  document.getElementById("login-btn")?.addEventListener("click", login);
 }
 
 function showLogout(email) {
@@ -64,10 +62,8 @@ function showLogout(email) {
       </ul>
     </li>
   `;
-  
-  document
-  .getElementById("logout-btn")
-  ?.addEventListener("click", logout);
+
+  document.getElementById("logout-btn")?.addEventListener("click", logout);
 }
 
 async function saveResult() {
@@ -125,18 +121,18 @@ async function login() {
   const options = makeOptions("POST", member, false);
 
   try {
-      const response = await fetch(URL, options).then(handleHttpErrors);
-      localStorage.setItem("user", response.username);
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("roles", response.roles);
+    const response = await fetch(URL, options).then(handleHttpErrors);
+    localStorage.setItem("user", response.username);
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("roles", response.roles);
 
-      const genericModalEl = document.getElementById('loginModalBox')
-      const modal = bootstrap.Modal.getInstance(genericModalEl)
-      modal.hide();
+    const genericModalEl = document.getElementById("loginModalBox");
+    const modal = bootstrap.Modal.getInstance(genericModalEl);
+    modal.hide();
 
-      showLogout(username);
+    showLogout(username);
   } catch (err) {
-      //setStatusMsg("Login failed", true);
+    //setStatusMsg("Login failed", true);
   }
 }
 
@@ -204,7 +200,7 @@ function sleepingBagFormSend() {
       trip.personHeight = personHeight;
     }
   } catch (error) {}
-  
+
   try {
     const isInStore = document.getElementById("not-wider");
 
@@ -212,7 +208,6 @@ function sleepingBagFormSend() {
       trip.isInStore = "true";
     }
   } catch (error) {}
-  
 
   fetchFilteredSleepingBags(trip);
 }
@@ -266,7 +261,9 @@ function showMultipleSleepingBags() {
   </div>
   `;
 
-  document.getElementById("sort-select")?.addEventListener("change", sortChangeEventListener);
+  document
+    .getElementById("sort-select")
+    ?.addEventListener("change", sortChangeEventListener);
 
   sleepingBags.sort(compareSleepingBagCostLowFirst);
 
@@ -278,15 +275,27 @@ function showMultipleSleepingBagsResult() {
     (sleepingBag) => `
   <div class="col">
     <div class="card m-2">
-      <a href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(sleepingBag.sku)}" target="_blank">
-        <img class="card-img-top" src="${sanitizeStringWithTableRows(sleepingBag.imageURL)}" alt="Image" style="width:200px">
+      <a href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
+        sleepingBag.sku
+      )}" target="_blank">
+        <img class="card-img-top" src="${sanitizeStringWithTableRows(
+          sleepingBag.imageURL
+        )}" alt="Image" style="width:200px">
       </a>
       <div class="card-body">
-        <a class="text-black" style="text-decoration: none;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(sleepingBag.sku)}" target="_blank">
-          <h6 style="font-weight: bolder;" class="card-title">${sanitizeStringWithTableRows(sleepingBag.brand)} ${sanitizeStringWithTableRows(sleepingBag.model)}</h6>
+        <a class="text-black" style="text-decoration: none;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
+          sleepingBag.sku
+        )}" target="_blank">
+          <h6 style="font-weight: bolder;" class="card-title">${sanitizeStringWithTableRows(
+            sleepingBag.brand
+          )} ${sanitizeStringWithTableRows(sleepingBag.model)}</h6>
         </a>
-        <h6 class="card-text">Pris: ${sanitizeStringWithTableRows(sleepingBag.cost)}</h6>
-        <h6 class="card-text">Vægt: ${sanitizeStringWithTableRows(sleepingBag.productWeight)}</h6>
+        <h6 class="card-text">Pris: ${sanitizeStringWithTableRows(
+          sleepingBag.cost
+        )}</h6>
+        <h6 class="card-text">Vægt: ${sanitizeStringWithTableRows(
+          sleepingBag.productWeight
+        )}</h6>
 
         <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
         data-sku="${sanitizeStringWithTableRows(sleepingBag.sku)}"
@@ -300,7 +309,8 @@ function showMultipleSleepingBagsResult() {
   `
   );
 
-  document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
+  document.getElementById("sleeping-bags-result").onclick =
+    showSleepingBagDetails;
 
   const tableRowsString = tableRowsArray.join("\n");
   document.getElementById("sleeping-bags-result").innerHTML = tableRowsString;
@@ -309,25 +319,20 @@ function showMultipleSleepingBagsResult() {
 function sortChangeEventListener(event) {
   if (event.target.value == "sortCostLowFirst") {
     sleepingBags.sort(compareSleepingBagCostLowFirst);
-  }
-  else if (event.target.value == "sortCostHighFirst") {
+  } else if (event.target.value == "sortCostHighFirst") {
     sleepingBags.sort(compareSleepingBagCostHighFirst);
-  }
-  else if (event.target.value == "sortWeightLowFirst") {
+  } else if (event.target.value == "sortWeightLowFirst") {
     sleepingBags.sort(compareSleepingBagWeightLowFirst);
   }
   showMultipleSleepingBagsResult();
 }
 
-
 function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.cost < sleepingBag2.cost) {
     return -1;
-  }
-  else if (sleepingBag1.cost > sleepingBag2.cost) {
+  } else if (sleepingBag1.cost > sleepingBag2.cost) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -335,11 +340,9 @@ function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
 function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.cost > sleepingBag2.cost) {
     return -1;
-  }
-  else if (sleepingBag1.cost < sleepingBag2.cost) {
+  } else if (sleepingBag1.cost < sleepingBag2.cost) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -347,11 +350,9 @@ function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
 function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.productWeight < sleepingBag2.productWeight) {
     return -1;
-  }
-  else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
+  } else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -359,14 +360,14 @@ function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
 async function showSleepingBagDetails(event) {
   const target = event.target;
   if (target.dataset.action == "details") {
-      const sku = target.dataset.sku;
-      const sleepingBag = sleepingBags.find(element => element.sku == sku);
+    const sku = target.dataset.sku;
+    const sleepingBag = sleepingBags.find((element) => element.sku == sku);
 
-      // bootstrap 5 modal
-      document.querySelector("#exampleModalLabel").innerText =
-        "Information om sovepose:";
+    // bootstrap 5 modal
+    document.querySelector("#exampleModalLabel").innerText =
+      "Information om sovepose:";
 
-      document.querySelector("#modal-body").innerText = `
+    document.querySelector("#modal-body").innerText = `
       Mærke: ${sleepingBag.brand}
       Produktnavn: ${sleepingBag.model}
       Pris: ${sleepingBag.cost}
@@ -379,9 +380,9 @@ async function showSleepingBagDetails(event) {
       Varenr: ${sleepingBag.sku}
       `;
 
-      // Generate link to the sleepingbag at Friluftslands homepage
-      const link = generateLink(sleepingBag.sku);
-      document.querySelector("#modal-link").innerHTML = link;  
+    // Generate link to the sleepingbag at Friluftslands homepage
+    const link = generateLink(sleepingBag.sku);
+    document.querySelector("#modal-link").innerHTML = link;
   }
 }
 
