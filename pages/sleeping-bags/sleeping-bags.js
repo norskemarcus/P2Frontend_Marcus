@@ -41,28 +41,31 @@ async function getMember() {
       handleHttpErrors
     );
 
-    if (result.isFemale){
-      document.getElementById("gender-female").checked = true
+    if (result.isFemale) {
+      document.getElementById("gender-female").checked = true;
     } else if (!result.isFemale) {
-      document.getElementById("gender-male").checked = true
+      document.getElementById("gender-male").checked = true;
     }
 
     document.getElementById("height").value = result.personHeight;
-    document.getElementById("not-wider").checked = result.isInStore;
 
-    /*   document.getElementById("temp-value").innerText =
-      result.environmentTemperatureMin; */
+    if (result.isInStore) {
+      document.getElementById("not-wider").checked = true;
+    } else if (!result.isInStore) {
+      document.getElementById("not-wider").checked = false;
+    }
 
-    /* document.getElementById("price-value-min").value = result.minCost;
-    document.getElementById("price-value-max").value = result.maxCost; */
+    if (result.innerMaterial === "Dun") {
+      document.querySelector("#fill-dun").checked = true;
+    } else if (result.innerMaterial === "Fiber") {
+      document.querySelector("#fill-fiber").checked = true;
+    }
 
-    /*   document.querySelector('input[name="gender"]:checked').value =
-      result.isFemale; */
-    /*  document.querySelector('input[name="fill"]:checked').value =
-      result.innerMaterial; */
+    document.getElementById("temp-value").textContent =
+      result.environmentTemperatureMin;
 
-     
-
+    document.getElementById("price-value-min").textContent = result.minCost;
+    document.getElementById("price-value-max").textContent = result.maxCost;
   }
 }
 
