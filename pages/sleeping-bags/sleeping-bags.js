@@ -115,7 +115,7 @@ function showLogout(email) {
       <a class="nav-link dropdown-toggle bg-opacity-0 text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         ${email}
       </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"> 
 
         <li 
         data-bs-toggle="modal"
