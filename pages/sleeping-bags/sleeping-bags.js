@@ -30,6 +30,8 @@ export function initSleepingBags() {
 
   document.querySelector("#delete-user-confirm")?.addEventListener("click", deleteUserById)
 
+
+
     showLogin();
 }
 
@@ -128,6 +130,18 @@ async function saveResult() {
 }
 
 async function login() {
+
+  document.querySelector("#delete-user-question").innerHTML = `
+  <p>Er du sikker på, at du vil slette din bruger?</p>
+  <button class="btn" id="delete-user-confirm">Ja</button>
+  <button class="btn btn-secondary"
+  type="button"
+  data-bs-dismiss="modal"
+  aria-label="Close">Nej</button>
+  `
+  document.querySelector("#delete-user-confirm")?.addEventListener("click", deleteUserById)
+
+
   const username = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
   let member = { username, password };
@@ -181,6 +195,7 @@ async function deleteUserById() {
     await fetch(URL, options).then(handleHttpErrors)
     localStorage.clear()
     document.querySelector("#status-delete").innerText = `Bruger ${memberToDelete} er slettet`
+    document.querySelector("#delete-user-question").innerText = ""
     showLogin()
 
     
