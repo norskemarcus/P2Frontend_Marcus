@@ -33,11 +33,11 @@ export function initSleepingBags() {
     .querySelector("#delete-user-confirm")
     ?.addEventListener("click", deleteUserById);
 
-  if (localStorage.user != null) {
+    showLogin();    
+
+  if (localStorage.getItem("user") !== null ) {
     getMember();
-  } else {
-    showLogin();
-  }
+  } 
 }
 
 async function getMember() {
@@ -50,9 +50,9 @@ async function getMember() {
     handleHttpErrors
   );
 
-  if (result.isFemale) {
+  if (result.isFemale === true) {
     document.getElementById("gender-female").checked = true;
-  } else if (!result.isFemale) {
+  } else if (result.isFemale === false) {
     document.getElementById("gender-male").checked = true;
   }
 
@@ -70,9 +70,9 @@ async function getMember() {
     document.querySelector("#fill-fiber").checked = true;
   }
 
-  if (result.isColdSensitive) {
+  if (result.isColdSensitive === true) {
     document.getElementById("cold-yes").checked = true;
-  } else if (!result.isColdSensitive) {
+  } else if (!result.isColdSensitive === false) {
     document.getElementById("cold-no").checked = true;
   }
 
@@ -356,7 +356,7 @@ function showMultipleSleepingBagsResult() {
     (sleepingBag) => `
   <div class="col">
     <div class="card m-2">
-      <a href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
+      <a style="display:grid; justify-content:center;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
         sleepingBag.sku
       )}" target="_blank">
         <img class="card-img-top" src="${sanitizeStringWithTableRows(
@@ -382,7 +382,7 @@ function showMultipleSleepingBagsResult() {
         data-sku="${sanitizeStringWithTableRows(sleepingBag.sku)}"
         data-action="details"
         data-bs-toggle="modal"
-        data-bs-target="#exampleModal">Details</button> 
+        data-bs-target="#exampleModal">Se mere</button> 
         
       </div>
     </div>
