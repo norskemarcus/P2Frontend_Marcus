@@ -5,9 +5,11 @@ import {
   makeOptions,
 } from "../../utils.js";
 
-const URL = "http://localhost:8080/api/sleeping-bags";
+const apiURL = "http://localhost:8080/api";
+const URL = apiURL + "/sleeping-bags";
 
 let sleepingBags;
+let tripInfo = {};
 
 export function initSleepingBags() {
   document
@@ -26,36 +28,116 @@ export function initSleepingBags() {
   document
     .getElementById("create-member")
     ?.addEventListener("click", saveResult);
+
+  document
+    .querySelector("#delete-user-confirm")
+    ?.addEventListener("click", deleteUserById);
+
+    showLogin();    
+
+  if (localStorage.getItem("user") !== null ) {
+    getMember();
+  } 
+}
+
+async function getMember() {
+  /* if (localStorage.user != null) {
+    showLogout(localStorage.getItem("user"));
+ */
+  const options = makeOptions("GET", null, true);
+
+  const result = await fetch(apiURL + "/member", options).then(
+    handleHttpErrors
+  );
+
+  if (result.isFemale === true) {
+    document.getElementById("gender-female").checked = true;
+  } else if (result.isFemale === false) {
+    document.getElementById("gender-male").checked = true;
+  }
+
+  document.getElementById("height").value = result.personHeight;
+
+  if (result.isInStore) {
+    document.getElementById("not-wider").checked = true;
+  } else if (!result.isInStore) {
+    document.getElementById("not-wider").checked = false;
+  }
+
+  if (result.innerMaterial === "Dun") {
+    document.querySelector("#fill-dun").checked = true;
+  } else if (result.innerMaterial === "Fiber") {
+    document.querySelector("#fill-fiber").checked = true;
+  }
+
+  if (result.isColdSensitive === true) {
+    document.getElementById("cold-yes").checked = true;
+  } else if (result.isColdSensitive === false) {
+    document.getElementById("cold-no").checked = true;
+  }
+
+  document.getElementById("temp-value").textContent =
+    result.environmentTemperatureMin;
+
+  document.getElementById("temp").value = result.environmentTemperatureMin;
+
+  document.getElementById("price-value-min").textContent = result.minCost;
+  document.getElementById("price-min").value = result.minCost;
+
+  document.getElementById("price-value-max").textContent = result.maxCost;
+  document.getElementById("price-max").value = result.maxCost;
+
+  showLogout(result.email);
+  sleepingBagFormSend();
+}
+
+function showLogin() {
+  document.getElementById("menu").innerHTML = `
+    <li class="nav-item">
+    <button                
+    type="button"
+    class="btn bg-opacity-0 text-white"
+    id="login-modal-btn-top"
+    data-bs-toggle="modal"
+    data-bs-target="#loginModalBox"
+  >
+    Log ind
+  </button>
+  </li>
+  `;
+
+  document.getElementById("login-btn")?.addEventListener("click", login);
+}
+
+function showLogout(email) {
+  document.getElementById("menu").innerHTML = `
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle bg-opacity-0 text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        ${email}
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"> 
+
+        <li 
+        data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+      id="delete-user-modal-btn-top" class="dropdown-item" style="cursor: pointer;">Slet bruger</li>
+        <li><hr class="dropdown-divider"></li>
+        <li id="logout-btn" class="dropdown-item" style="cursor: pointer;">Log ud</li>
+      </ul>
+    </li>
+    <li class="nav-item">
+  `;
+
+  document.getElementById("logout-btn")?.addEventListener("click", logout);
 }
 
 async function saveResult() {
   const password = document.getElementById("password").value;
   const email = document.getElementById("email").value;
-  let member = { password, email };
 
-  try {
-    const isFemale =
-      document.querySelector('input[name="gender"]:checked').value === "female"
-        ? "true"
-        : "false";
-    member.isFemale = isFemale;
-  } catch (error) {}
-
-  try {
-    const personHeight = document.getElementById("height").value;
-
-    if (personHeight?.length !== 0) {
-      member.personHeight = personHeight;
-    }
-  } catch (error) {}
-
-  try {
-    const isColdSensitive =
-      document.querySelector('input[name="cold"]:checked').value === "true"
-        ? "true"
-        : "false";
-    member.isColdSensitive = isColdSensitive;
-  } catch (error) {}
+  let member = tripInfo;
+  member.password = password;
+  member.email = email;
 
   const memberURL = "http://localhost:8080/api/member";
 
@@ -66,22 +148,20 @@ async function saveResult() {
     await fetch(memberURL, options).then(handleHttpErrors);
     document.getElementById("status-create-member").innerText =
       "Bruger oprettet";
-    document.getElementById("email").innerText = "";
-    document.getElementById("password").innerText = "";
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
   } catch (error) {
     document.getElementById("status-create-member").innerText = error.message;
   }
 }
 
 function sleepingBagFormSend() {
-  let trip = {};
-
   try {
     const environmentTemperatureMin =
       document.getElementById("temp-value")?.textContent;
 
     if (environmentTemperatureMin?.length !== 0) {
-      trip.environmentTemperatureMin = environmentTemperatureMin;
+      tripInfo.environmentTemperatureMin = environmentTemperatureMin;
     }
   } catch (error) {}
 
@@ -89,7 +169,7 @@ function sleepingBagFormSend() {
     const minCost = document.getElementById("price-value-min")?.textContent;
 
     if (minCost?.length !== 0) {
-      trip.minCost = minCost;
+      tripInfo.minCost = minCost;
     }
   } catch (error) {}
 
@@ -97,7 +177,7 @@ function sleepingBagFormSend() {
     const maxCost = document.getElementById("price-value-max")?.textContent;
 
     if (maxCost?.length !== 0) {
-      trip.maxCost = maxCost;
+      tripInfo.maxCost = maxCost;
     }
   } catch (error) {}
 
@@ -106,7 +186,7 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="gender"]:checked').value === "female"
         ? "true"
         : "false";
-    trip.isFemale = isFemale;
+    tripInfo.isFemale = isFemale;
   } catch (error) {}
 
   try {
@@ -114,7 +194,7 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="cold"]:checked').value === "true"
         ? "true"
         : "false";
-    trip.isColdSensitive = isColdSensitive;
+    tripInfo.isColdSensitive = isColdSensitive;
   } catch (error) {}
 
   try {
@@ -122,27 +202,105 @@ function sleepingBagFormSend() {
       document.querySelector('input[name="fill"]:checked').value === "fiber"
         ? "Fiber"
         : "Dun";
-    trip.innerMaterial = innerMaterial;
+    tripInfo.innerMaterial = innerMaterial;
   } catch (error) {}
 
   try {
     const personHeight = document.getElementById("height").value;
 
     if (personHeight?.length !== 0) {
-      trip.personHeight = personHeight;
+      tripInfo.personHeight = personHeight;
     }
   } catch (error) {}
-  
+
   try {
     const isInStore = document.getElementById("not-wider");
 
     if (isInStore.checked) {
-      trip.isInStore = "true";
+      tripInfo.isInStore = "true";
     }
   } catch (error) {}
-  
 
-  fetchFilteredSleepingBags(trip);
+  fetchFilteredSleepingBags(tripInfo);
+}
+
+async function login() {
+
+  document.querySelector("#delete-user-question").innerHTML = `
+  <p>Er du sikker på, at du vil slette din bruger?</p>
+  <button class="btn" id="delete-user-confirm">Ja</button>
+  <button class="btn btn-secondary"
+  type="button"
+  data-bs-dismiss="modal"
+  aria-label="Close">Nej</button>
+  `
+  document.querySelector("#delete-user-confirm")?.addEventListener("click", deleteUserById)
+
+
+  const username = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+  let member = { username, password };
+
+  const URL = apiURL + "/auth/login";
+
+  const options = makeOptions("POST", member, false);
+
+  try {
+    const response = await fetch(URL, options).then(handleHttpErrors);
+    localStorage.setItem("user", response.username);
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("roles", response.roles);
+
+    const genericModalEl = document.getElementById("loginModalBox");
+    const modal = bootstrap.Modal.getInstance(genericModalEl);
+    modal.hide();
+    getMember();
+
+    document.querySelector("#login-email").value = "";
+    document.querySelector("#login-password").value = "";
+
+    showLogout(username);
+  } catch (err) {
+    //setStatusMsg("Login failed", true);
+  }
+}
+
+function logout() {
+  localStorage.clear();
+  showLogin();
+}
+
+async function deleteUserById() {
+  try {
+    const memberToDelete = localStorage.getItem("user");
+
+    console.log(memberToDelete);
+
+    if (memberToDelete === "") {
+      document.querySelector(
+        "#status-delete"
+      ).innerText = `No member found to delete`;
+      return;
+    }
+
+    const options = makeOptions("DELETE", null, true);
+
+    const URL = apiURL + "/member"
+    
+    await fetch(URL, options).then(handleHttpErrors)
+    localStorage.clear()
+    document.querySelector("#status-delete").innerText = `Bruger ${memberToDelete} er slettet`
+    document.querySelector("#delete-user-question").innerText = ""
+    showLogin()
+  } catch (err) {
+    document.querySelector("#status-delete").innerText = `api-fejl`;
+  }
+
+  document
+    .querySelector("#close-delete-modal")
+    ?.addEventListener("click", () => {
+      document.querySelector("#status-delete").innerText = "";
+    });
 }
 
 function adjustTempValue() {
@@ -194,7 +352,9 @@ function showMultipleSleepingBags() {
   </div>
   `;
 
-  document.getElementById("sort-select")?.addEventListener("change", sortChangeEventListener);
+  document
+    .getElementById("sort-select")
+    ?.addEventListener("change", sortChangeEventListener);
 
   sleepingBags.sort(compareSleepingBagCostLowFirst);
 
@@ -205,56 +365,63 @@ function showMultipleSleepingBagsResult() {
   const tableRowsArray = sleepingBags.map(
     (sleepingBag) => `
   <div class="col">
-    <div class="card m-2"">
-      <img class="card-img-top" src="${sleepingBag.imageURL}" alt="Image" style="display: grid; justify-items: center;">
+    <div class="card m-2">
+      <a style="display:grid; justify-content:center;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
+        sleepingBag.sku
+      )}" target="_blank">
+        <img class="card-img-top" src="${sanitizeStringWithTableRows(
+          sleepingBag.imageURL
+        )}" alt="Image" style="width:200px">
+      </a>
       <div class="card-body">
-        <h6 style="font-weight: bold;" class="card-title">${sleepingBag.brand}</h6>
-        <h6 style="font-weight: bold;" class="card-text">${sleepingBag.model}</h6>
-        <h6 class="card-text">Pris: ${sleepingBag.cost}</h6>
-        <h6 class="card-text">Vægt: ${sleepingBag.productWeight}</h6>
-
+        <a class="text-black" style="text-decoration: none;" href="https://www.friluftsland.dk/msearch?q=${sanitizeStringWithTableRows(
+          sleepingBag.sku
+        )}" target="_blank">
+          <h6 style="font-weight: bolder;" class="card-title">${sanitizeStringWithTableRows(
+            sleepingBag.brand
+          )} ${sanitizeStringWithTableRows(sleepingBag.model)}</h6>
+        </a>
+        <h6 class="card-text">Pris: ${sanitizeStringWithTableRows(
+          sleepingBag.cost
+        )}</h6>
+        <h6 class="card-text">Vægt: ${sanitizeStringWithTableRows(
+          sleepingBag.productWeight
+        )}</h6>
 
         <button type="button" class="btn btn-sm btn-dark" style="background-color: #00461c;" 
-        data-sku="${sleepingBag.sku}"
+        data-sku="${sanitizeStringWithTableRows(sleepingBag.sku)}"
         data-action="details"
         data-bs-toggle="modal"
-        data-bs-target="#exampleModal">Mere info</button> 
+        data-bs-target="#exampleModal">Se mere</button> 
         
       </div>
     </div>
-  </div>
-  `
+  </div>`
   );
 
   document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
 
   const tableRowsString = tableRowsArray.join("\n");
-  document.getElementById("sleeping-bags-result").innerHTML =
-    sanitizeStringWithTableRows(tableRowsString);
+  document.getElementById("sleeping-bags-result").innerHTML = tableRowsString;
 }
 
 function sortChangeEventListener(event) {
   if (event.target.value == "sortCostLowFirst") {
     sleepingBags.sort(compareSleepingBagCostLowFirst);
-  }
-  else if (event.target.value == "sortCostHighFirst") {
+  } else if (event.target.value == "sortCostHighFirst") {
     sleepingBags.sort(compareSleepingBagCostHighFirst);
-  }
-  else if (event.target.value == "sortWeightLowFirst") {
+  } else if (event.target.value == "sortWeightLowFirst") {
     sleepingBags.sort(compareSleepingBagWeightLowFirst);
   }
   showMultipleSleepingBagsResult();
 }
 
-
 function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.cost < sleepingBag2.cost) {
     return -1;
-  }
-  else if (sleepingBag1.cost > sleepingBag2.cost) {
+  } else if (sleepingBag1.cost > sleepingBag2.cost) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -262,11 +429,9 @@ function compareSleepingBagCostLowFirst(sleepingBag1, sleepingBag2) {
 function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.cost > sleepingBag2.cost) {
     return -1;
-  }
-  else if (sleepingBag1.cost < sleepingBag2.cost) {
+  } else if (sleepingBag1.cost < sleepingBag2.cost) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -274,11 +439,9 @@ function compareSleepingBagCostHighFirst(sleepingBag1, sleepingBag2) {
 function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
   if (sleepingBag1.productWeight < sleepingBag2.productWeight) {
     return -1;
-  }
-  else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
+  } else if (sleepingBag1.productWeight > sleepingBag2.productWeight) {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -286,14 +449,14 @@ function compareSleepingBagWeightLowFirst(sleepingBag1, sleepingBag2) {
 async function showSleepingBagDetails(event) {
   const target = event.target;
   if (target.dataset.action == "details") {
-      const sku = target.dataset.sku;
-      const sleepingBag = sleepingBags.find(element => element.sku == sku);
+    const sku = target.dataset.sku;
+    const sleepingBag = sleepingBags.find((element) => element.sku == sku);
 
-      // bootstrap 5 modal
-      document.querySelector("#exampleModalLabel").innerText =
-        "Information om sovepose " + sleepingBag.sku;
+    // bootstrap 5 modal
+    document.querySelector("#exampleModalLabel").innerText =
+      "Information om sovepose:";
 
-      document.querySelector("#modal-body").innerText = `
+    document.querySelector("#modal-body").innerText = `
       Mærke: ${sleepingBag.brand}
       Produktnavn: ${sleepingBag.model}
       Pris: ${sleepingBag.cost}
@@ -306,19 +469,9 @@ async function showSleepingBagDetails(event) {
       Varenr: ${sleepingBag.sku}
       `;
 
-      if (sleepingBag.note !== null) {
-      document.querySelector("#modal-note").innerText = `
-      Note: ${sleepingBag.note}
-      `
-    } else {
-      document.querySelector("#modal-note").innerText = ``
-    }
-
-
-
-      // Generate link to the sleepingbag at Friluftslands homepage
-      const link = generateLink(sleepingBag.sku);
-      document.querySelector("#modal-link").innerHTML = link;  
+    // Generate link to the sleepingbag at Friluftslands homepage
+    const link = generateLink(sleepingBag.sku);
+    document.querySelector("#modal-link").innerHTML = link;
   }
 }
 
@@ -327,7 +480,6 @@ function generateLink(sku) {
 }
 
 async function fetchFilteredSleepingBags(tripObj) {
-  //TODO: change to true when security is added
   const options = makeOptions("POST", tripObj, false);
 
   try {

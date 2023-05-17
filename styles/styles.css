@@ -68,3 +68,12 @@
     border-radius: 1rem;
     border: none;
   }
+
+  #delete-user-confirm:hover{
+    background-color: rgba(0, 70, 28, 0.7);
+  }
+  
+  #delete-user-confirm{
+    background-color:#00461c;
+    color: white;
+  }
