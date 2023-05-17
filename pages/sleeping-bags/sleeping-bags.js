@@ -5,7 +5,7 @@ import {
   makeOptions,
 } from "../../utils.js";
 
-const apiURL = "https://sovepose.tommyhelle.dk/api";
+const apiURL = 'https://sovepose.tommyhelle.dk/api';
 const URL = apiURL + "/sleeping-bags";
 
 let sleepingBags;
