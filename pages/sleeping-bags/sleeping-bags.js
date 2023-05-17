@@ -87,6 +87,16 @@ async function getMember() {
   document.getElementById("price-value-max").textContent = result.maxCost;
   document.getElementById("price-max").value = result.maxCost;
 
+  document.querySelector("#delete-user-question").innerHTML = `
+  <p>Er du sikker på, at du vil slette din bruger?</p>
+  <button class="btn" id="delete-user-confirm">Ja</button>
+  <button class="btn btn-secondary"
+  type="button"
+  data-bs-dismiss="modal"
+  aria-label="Close">Nej</button>
+  `
+  document.querySelector("#delete-user-confirm")?.addEventListener("click", deleteUserById)
+
   showLogout(result.email);
   sleepingBagFormSend();
 }
@@ -225,17 +235,6 @@ function sleepingBagFormSend() {
 }
 
 async function login() {
-
-  document.querySelector("#delete-user-question").innerHTML = `
-  <p>Er du sikker på, at du vil slette din bruger?</p>
-  <button class="btn" id="delete-user-confirm">Ja</button>
-  <button class="btn btn-secondary"
-  type="button"
-  data-bs-dismiss="modal"
-  aria-label="Close">Nej</button>
-  `
-  document.querySelector("#delete-user-confirm")?.addEventListener("click", deleteUserById)
-
 
   const username = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
