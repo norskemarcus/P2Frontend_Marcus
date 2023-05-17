@@ -360,9 +360,10 @@ function showMultipleSleepingBagsResult() {
         
       </div>
     </div>
-  </div>
-  `
+  </div>`
   );
+
+
 
   document.getElementById("sleeping-bags-result").onclick = showSleepingBagDetails;
 
