@@ -5,7 +5,7 @@ import {
   makeOptions,
 } from "../../utils.js";
 
-const apiURL = "http://localhost:8080/api";
+const apiURL = "https://sovepose.azurewebsites.net/api";
 const URL = apiURL + "/sleeping-bags";
 
 let sleepingBags;
@@ -41,9 +41,7 @@ export function initSleepingBags() {
 }
 
 async function getMember() {
-  /* if (localStorage.user != null) {
-    showLogout(localStorage.getItem("user"));
- */
+
   const options = makeOptions("GET", null, true);
 
   const result = await fetch(apiURL + "/member", options).then(
@@ -149,7 +147,7 @@ async function saveResult() {
   member.password = password;
   member.email = email;
 
-  const memberURL = "http://localhost:8080/api/member";
+  const memberURL = apiURL + "/member";
 
   // member = body
   const options = makeOptions("POST", member, false);
