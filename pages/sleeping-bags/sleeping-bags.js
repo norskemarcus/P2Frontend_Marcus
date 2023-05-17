@@ -72,7 +72,7 @@ async function getMember() {
 
   if (result.isColdSensitive === true) {
     document.getElementById("cold-yes").checked = true;
-  } else if (!result.isColdSensitive === false) {
+  } else if (result.isColdSensitive === false) {
     document.getElementById("cold-no").checked = true;
   }
 
